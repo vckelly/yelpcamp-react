@@ -1,17 +1,7 @@
 import logo from './logo.svg';
-import Campgrounds from './components/Campgrounds.js';
+import Campgrounds from './components/Campgrounds.jsx';
 import './App.css';
 import Axios from 'axios';
-
-Axios({
-  method: "GET",
-  url: "http://localhost:5000/campgrounds",
-  headers: {
-    "Content-Type": "application/json"
-  }
-}).then(res => {
-  console.log(res);
-});
 
 function App() {
   return (
