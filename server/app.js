@@ -6,6 +6,7 @@ const express = require('express');
 const session = require('express-session');
 const flash = require('connect-flash');
 const ejsMate = require('ejs-mate');
+const cors = require('cors');
 const ExpressError = require('./utils/ExpressError')
 const path = require('path');
 const mongoose = require('mongoose');
@@ -44,6 +45,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize());
+app.use(cors());
 
 const sessionConfig = {
   secret: 'secret',
@@ -139,6 +141,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render('error', { err });
 });
 
-app.listen(3000, () => {
-  console.log('Serving on port 3000')
+app.listen(5000, () => {
+  console.log('Serving on port 5000')
 });
