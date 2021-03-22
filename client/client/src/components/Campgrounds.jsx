@@ -20,32 +20,34 @@ import Campground from './Campground.jsx';
 function Campgrounds() {
 
   const [campgroundState, setCampgroundState] = useState([]);
-  
+
   useEffect(() => {
     async function fetchData () {
       try {
         const response = await fetch('http://localhost:5000/campgrounds');
         const json = await response.json();
-        //console.log(json);
+
         setCampgroundState(json)
+
       } catch (error) {}
     }
     if (campgroundState.length === 0) {
       fetchData();
     }
-  }, []);
+  }, [campgroundState]);
 
-  console.log('OUTSIDE FUNC!!!!', campgroundState);
+  console.log(campgroundState);
+
   return (
     <div className="Campgrounds">
       <h1>Campgrounds!</h1>
       <div className="Campground">
-        { campgroundState.length && campgroundState.map((camp) => (
+         { campgroundState.map((camp) => (
           <Campground
             key={camp.id}
             campground={camp}
           />
-        ))} 
+        ))}
       </div>
     </div>
   )
