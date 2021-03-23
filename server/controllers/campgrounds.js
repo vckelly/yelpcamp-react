@@ -42,6 +42,8 @@ module.exports.showCampground = async (req, res,) => {
         return res.redirect('/campgrounds');
     }
     res.send(campground);
+
+    //res.redirect(`/${campround_id}`);
 }
 
 module.exports.renderEditForm = async (req, res) => {

@@ -1,34 +1,30 @@
 import logo from './logo.svg';
+import Home from './components/Home.jsx';
 import Campgrounds from './components/Campgrounds.jsx';
 import ShowCampground from './components/ShowCampground.jsx';
 import './App.css';
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Axios from 'axios';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        
-      </header>
-      <Campgrounds />
-      <Route path="/:id">
-        <ShowCampground />
-      </Route>
+      <Switch>
+        <Route path="/campgrounds/:id">
+          <ShowCampground />
+        </Route>
+
+        <Route path="/campgrounds">
+          <Campgrounds />
+        </Route>
+
+        <Route path="/">
+          <Home />
+        </Route>
+      </Switch>
     </div>
   );
 }
+
 
 export default App;

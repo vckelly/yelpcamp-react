@@ -36,8 +36,6 @@ function Campgrounds() {
     }
   }, [campgroundState]);
 
-  console.log(campgroundState);
-
   return (
     <div className="Campgrounds">
       <h1>Campgrounds!</h1>

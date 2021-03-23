@@ -23,11 +23,8 @@ function Campground(camp) {
         </Card.Text>
       </Card.Body>
       <Card.Body>
-        <Link to="/:id">View</Link>
+        <Link to={"/campgrounds/" + camp.campground.id}>View</Link>
       </Card.Body>
-      <Route path="/:id">
-        <ShowCampground />
-      </Route>
     </Card>
     
   )
