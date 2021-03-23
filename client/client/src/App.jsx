@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import Campgrounds from './components/Campgrounds.jsx';
+import ShowCampground from './components/ShowCampground.jsx';
 import './App.css';
+import { Route } from "react-router-dom";
 import Axios from 'axios';
 
 function App() {
@@ -22,6 +24,9 @@ function App() {
         
       </header>
       <Campgrounds />
+      <Route path="/:id">
+        <ShowCampground />
+      </Route>
     </div>
   );
 }

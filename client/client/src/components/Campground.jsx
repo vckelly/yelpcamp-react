@@ -1,5 +1,11 @@
-import React, { Component } from 'react';
-import { Card } from 'react-bootstrap/Card';
+import React from 'react';
+import ShowCampground from './ShowCampground';
+import {
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import Card from 'react-bootstrap/Card';
 
 function Campground(camp) {
   return (
@@ -17,10 +23,13 @@ function Campground(camp) {
         </Card.Text>
       </Card.Body>
       <Card.Body>
-        <Card.Link href="#">Card Link</Card.Link>
-        <Card.Link href="#">Another Link</Card.Link>
+        <Link to="/:id">View</Link>
       </Card.Body>
+      <Route path="/:id">
+        <ShowCampground />
+      </Route>
     </Card>
+    
   )
 }
 
