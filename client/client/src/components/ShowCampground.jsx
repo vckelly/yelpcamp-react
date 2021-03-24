@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import Card from 'react-bootstrap/Card';
 import Carousel from 'react-bootstrap/Carousel';
+import Form from 'react-bootstrap/Form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
+import Rating from '@material-ui/lab/Rating';
 
 
 // const getCampgrounds = async () => {
@@ -20,7 +22,7 @@ function ShowCampground() {
 
   let { id } = useParams();
   const [campgroundState, setCampgroundState] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isDataLoaded, setLoaded] = useState(false);
 
   useEffect(() => {
     async function fetchData () {
@@ -28,7 +30,7 @@ function ShowCampground() {
         const response = await fetch(`http://localhost:5000/campgrounds/${id}`);
         const json = await response.json();
         setCampgroundState(json);
-        setLoading(true);        
+        setLoaded(true);        
         //console.log(campgroundState);
       } catch (error) {}
     }
@@ -42,22 +44,27 @@ function ShowCampground() {
   //console.log(campgroundState);
   return (
     <div className="row">
-    <h1>ShowCampground!</h1>
-        { loading ? (
+      <h1>ShowCampground!</h1>
+        { isDataLoaded ? (
           <div className="col-6">
-            { campgroundState.images[0] ?
-              (<Carousel>
-                { campgroundState.images.forEach((img, i) => {
-                    <Carousel.Item >
-                      <img
+            { campgroundState.images.length > 0 ?
+              (
+                <Carousel>
+                { campgroundState.images.map((img) => {
+                    return (
+                    <Carousel.Item key={img.id}>
+                      <img          
+                        key={img.id}              
                         className="d-block w-100"
                         src={img.url}
                         alt='Slide Here'
                       />
                     </Carousel.Item>
+                    )
                   }
                 )}                
-              </Carousel>) 
+                </Carousel>
+              ) 
               : ('')
             }
             <Card className="mb-3">
@@ -76,6 +83,14 @@ function ShowCampground() {
             </Card>
           </div>) : (<Spinner animation="border" />)
         }
+        <div className="col-6">
+          <h2>Leave a Review</h2>
+          <Form>
+            <Form.Group controlId="ratingStars">
+              <Rating name="pristine" />
+            </Form.Group>
+          </Form>
+        </div>
       </div>
   )
 }
