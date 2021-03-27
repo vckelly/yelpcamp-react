@@ -13,7 +13,7 @@ export default function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e, e.target, e.target.entries);
+        console.log(e.nativeEvent.target[0].value);
     }
     // useEffect(() => {
 
@@ -30,21 +30,21 @@ export default function Register() {
                         <Card.Body>
                             <Card.Title>Register</Card.Title>
                             <Form onSubmit={handleSubmit}>
-                                <Form.Group>
+                                <Form.Group controlId="email" >
                                     <Form.Label>Email address</Form.Label>
-                                    <Form.Control type="email" name="email" id="email" placeholder="Enter email" />
+                                    <Form.Control type="email" name="email"  placeholder="Enter email" />
                                     <Form.Text className="text-muted">
                                     We'll never share your email with anyone else.
                                     </Form.Text>
                                 </Form.Group>
-                                <Form.Group>
+                                <Form.Group controlId="username">
                                     <Form.Label>Username</Form.Label>
-                                    <Form.Control type="username" name="username" id="username" placeholder="Enter username" />
+                                    <Form.Control type="username" name="username" placeholder="Enter username" />
                                 </Form.Group>
 
-                                <Form.Group>
+                                <Form.Group controlId="password">
                                     <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" name="password" id="password" placeholder="Password" />
+                                    <Form.Control type="password" name="password" placeholder="Password" />
                                 </Form.Group>
                                 <Button variant="success" type="submit">Register</Button>{' '}
                             </Form>
