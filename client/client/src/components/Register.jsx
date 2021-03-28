@@ -11,10 +11,29 @@ export default function Register() {
     const [hasButtonBeenClicked, setButtonBeenClicked] = useState(false);
     const [userState, setuserState] = useState(null);
 
+    //TODO: Add axios post to register api
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(e.nativeEvent.target[0].value);
-    }
+
+        const data = {
+            email: e.nativeEvent.target[0].value,
+            username: e.nativeEvent.target[1].value,
+            password: e.nativeEvent.target[2].value
+        };
+
+        console.log("DATA", data);
+        fetch('http://localhost:5000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then((res) => {
+            console.log("response", res)
+        })
+    };
     // useEffect(() => {
 
     // });
