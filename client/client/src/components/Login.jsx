@@ -7,21 +7,18 @@ import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form'
 
 
-export default function Register() {
+export default function Login() {
 
     const [redirect, setRedirect] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e.nativeEvent.target[0].value);
-
         const data = {
-            email: e.nativeEvent.target[0].value,
-            username: e.nativeEvent.target[1].value,
-            password: e.nativeEvent.target[2].value
+            username: e.nativeEvent.target[0].value,
+            password: e.nativeEvent.target[1].value
         };
 
-        fetch('http://localhost:5000/register', {
+        fetch('http://localhost:5000/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,7 +26,7 @@ export default function Register() {
             },
             body: JSON.stringify(data)
         }).then((res) => {
-            //console.log("response", res);
+            console.log("response", res);
             if (res.status === 200) {
                 setRedirect(true);
             }
@@ -51,25 +48,17 @@ export default function Register() {
                             <Image src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
                                 alt="" className="card-img-top"/>
                             <Card.Body>
-                                <Card.Title>Register</Card.Title>
+                                <Card.Title>Login</Card.Title>
                                 <Form onSubmit={handleSubmit}>
-                                    <Form.Group controlId="email" >
-                                        <Form.Label>Email address</Form.Label>
-                                        <Form.Control type="email" name="email"  placeholder="Enter email" />
-                                        <Form.Text className="text-muted">
-                                        We'll never share your email with anyone else.
-                                        </Form.Text>
-                                    </Form.Group>
-                                    <Form.Group controlId="username">
+                                    <Form.Group controlId="username" >
                                         <Form.Label>Username</Form.Label>
-                                        <Form.Control type="username" name="username" placeholder="Enter username" />
+                                        <Form.Control type="username" name="username"  placeholder="username" />
                                     </Form.Group>
-
-                                    <Form.Group controlId="password">
+\                                   <Form.Group controlId="password">
                                         <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" name="password" placeholder="Password" />
+                                        <Form.Control type="password" name="password" placeholder="password" />
                                     </Form.Group>
-                                    <Button variant="success" type="submit">Register</Button>{' '}
+                                    <Button variant="success" type="submit">Login</Button>{' '}
                                 </Form>
                             </Card.Body>
                         </Card>
