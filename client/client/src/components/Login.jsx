@@ -54,7 +54,7 @@ export default function Login() {
                                         <Form.Label>Username</Form.Label>
                                         <Form.Control type="username" name="username"  placeholder="username" />
                                     </Form.Group>
-\                                   <Form.Group controlId="password">
+                                    <Form.Group controlId="password">
                                         <Form.Label>Password</Form.Label>
                                         <Form.Control type="password" name="password" placeholder="password" />
                                     </Form.Group>

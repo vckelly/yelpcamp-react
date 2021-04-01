@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
+import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card';
 import Carousel from 'react-bootstrap/Carousel';
 import Form from 'react-bootstrap/Form';
+import { Link } from "react-router-dom";
 import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
 import Rating from '@material-ui/lab/Rating';
@@ -23,6 +25,10 @@ function ShowCampground() {
   let { id } = useParams();
   const [campgroundState, setCampgroundState] = useState(null);
   const [isDataLoaded, setLoaded] = useState(false);
+
+  const handleClick = () => {
+
+  }
 
   useEffect(() => {
     async function fetchData () {
@@ -77,6 +83,7 @@ function ShowCampground() {
                 <ListGroup.Item>{"Submitted by " + campgroundState.author.username}</ListGroup.Item>
                 <ListGroup.Item>{"$" + campgroundState.price + "/night"}</ListGroup.Item>
               </ListGroup>
+              <Link to={`/campgrounds/${id}/edit`} className="btn btn-success">Edit Campground</Link>
               <div className="col-6 text-muted">
                 2 days ago
               </div>

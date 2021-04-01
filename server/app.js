@@ -22,7 +22,7 @@ const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+mongoose.connect('mongodb://localhost:27017/yelpcamp', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
@@ -34,6 +34,15 @@ db.on("error", console.error.bind(console, 'connection error:'));
 db.once("open", () => {
   console.log("Database connected");
 });
+
+// const MongoClient = require('mongodb').MongoClient;
+// const uri = "mongodb+srv://vckelly@gmail.com:blue3434@cluster0.e940d.mongodb.net/yelpcamp?retryWrites=true&w=majority";
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+// client.connect(err => {
+//   const collection = client.db("test").collection("devices");
+//   // perform actions on the collection object
+//   client.close();
+// });
 
 const app = express();
 

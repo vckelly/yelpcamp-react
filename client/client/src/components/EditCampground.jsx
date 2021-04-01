@@ -45,8 +45,8 @@ export default function EditCampground() {
             files: {}
         };
 
-        fetch(`http://localhost:5000/camprounds/${id}/edit`, {
-            method: 'PUT',
+        fetch(`http://localhost:5000/camprounds/${id}?_method=PUT`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -94,9 +94,8 @@ export default function EditCampground() {
                         </div>
                         <div className="mb-3">
                             <Form.Group controlId="imageFiles" >
-                                <Form.File id="imageFile" label="Example file input" multiple/>
-                                <span className="form-file-text custom-file-label">Add more image(s)...</span>
-                                <span className="form-file-button">Browse</span>
+                                <span className="form-file-text custom-file-label">Add more image(s)...</span>                   
+                                <Form.File id="imageFile" multiple/>   
                             </Form.Group>
                         </div>
                         <Button variant="info" type="submit">Update Campground</Button>{' '}
