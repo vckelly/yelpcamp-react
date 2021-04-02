@@ -6,6 +6,9 @@ import Container from 'react-bootstrap/Container'
 import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Login() {
 
@@ -32,12 +35,21 @@ export default function Login() {
             body: JSON.stringify(data)
         }).then((res) => {
             if (res.url.includes('/campgrounds')) {
-                history.push('/campgrounds')
+                history.push({
+                    pathname: '/campgrounds',
+                    state: { 
+                        from: 'login'
+                    }
+                })
             }
             else {
-                history.push('/login')
+                history.push({
+                    pathname: '/login',
+                    state: { 
+                        from: 'login'
+                    }
+                })
             }
-            
             //TODO: Error handling
         })
     };

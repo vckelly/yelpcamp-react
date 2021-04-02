@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useHistory, useLocation } from "react-router-dom"; 
 import Campground from './Campground.jsx';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -14,11 +17,12 @@ import Campground from './Campground.jsx';
 //   }
 // };
 
-
-
-
 function Campgrounds() {
 
+  let history = useHistory();
+  let location = useLocation();
+  console.log(history, location);
+  
   const [campgroundState, setCampgroundState] = useState([]);
 
   useEffect(() => {
@@ -38,15 +42,41 @@ function Campgrounds() {
 
   return (
     <div className="Campgrounds">
-      <h1>Campgrounds!</h1>
-      <div className="Campground">
-         { campgroundState.map((camp) => (
-          <Campground
-            key={camp.id}
-            campground={camp}
+      { location.state.from === 'login' ? (
+        <div>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
           />
-        ))}
-      </div>
+          <h1>Campgrounds!</h1>
+          <div className="Campground">
+            { campgroundState.map((camp) => (
+              <Campground
+                key={camp.id}
+                campground={camp}
+              />
+            ))}
+        </div>
+      )
+      : (
+        <h1>Campgrounds!</h1>
+        <div className="Campground">
+          { campgroundState.map((camp) => (
+            <Campground
+              key={camp.id}
+              campground={camp}
+            />
+          ))}
+        </div>
+        )
+    }
     </div>
   )
 }
