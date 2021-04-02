@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react'
-import { Redirect } from "react-router-dom"; 
+import { Redirect, useHistory } from "react-router-dom"; 
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
@@ -9,7 +9,10 @@ import Form from 'react-bootstrap/Form'
 
 export default function Login() {
 
-    const [redirect, setRedirect] = useState(false);
+    const history = useHistory();
+    let [userName, setUserName] = useState('');
+    let [pw, setPw] = useState('');
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -17,7 +20,9 @@ export default function Login() {
             username: e.nativeEvent.target[0].value,
             password: e.nativeEvent.target[1].value
         };
-
+        
+        setUserName('');
+        setPw('');
         fetch('http://localhost:5000/login', {
             method: 'POST',
             headers: {
@@ -26,21 +31,22 @@ export default function Login() {
             },
             body: JSON.stringify(data)
         }).then((res) => {
-            console.log("response", res);
-            if (res.status === 200) {
-                setRedirect(true);
+            if (res.url.includes('/campgrounds')) {
+                history.push('/campgrounds')
             }
+            else {
+                history.push('/login')
+            }
+            
             //TODO: Error handling
         })
     };
 
+    const handleUsernameChange = (e) => { setUserName(e.target.value) };
+    const handlePasswordChange = (e) => { setPw(e.target.value) };
+
     return (
-        <div>
-        { redirect ? (
-            <Redirect 
-                to={{ pathname: "/campgrounds"}}
-            />
-        ) : (    
+        <div> 
             <Container>
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
@@ -52,11 +58,11 @@ export default function Login() {
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group controlId="username" >
                                         <Form.Label>Username</Form.Label>
-                                        <Form.Control type="username" name="username"  placeholder="username" />
+                                        <Form.Control type="username" name="username"  placeholder="username" value={userName} onChange={handleUsernameChange}/>
                                     </Form.Group>
                                     <Form.Group controlId="password">
                                         <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" name="password" placeholder="password" />
+                                        <Form.Control type="password" name="password" placeholder="password" value={pw} onChange={handlePasswordChange}/>
                                     </Form.Group>
                                     <Button variant="success" type="submit">Login</Button>{' '}
                                 </Form>
@@ -65,7 +71,6 @@ export default function Login() {
                     </div>
                 </div>
             </Container>
-            )}
         </div>
     )
 };
