@@ -44,17 +44,7 @@ function Campgrounds() {
 
   return (
     <div className="Campground">
-      <ToastContainer
-        position="top-right"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      <ToastContainer />
       <h1>Campgrounds!</h1>
       { campgroundState.map((camp) => (
         <Campground

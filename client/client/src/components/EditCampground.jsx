@@ -12,29 +12,37 @@ export default function EditCampground() {
     const [campgroundState, setCampgroundState] = useState(null);
     const [isDataLoaded, setLoaded] = useState(false);
 
+    const [title, setTitle] = useState('');
+    const [location, setLocation] = useState('');
+    const [price, setPrice] = useState('');
+    const [description, setDescription] = useState('');
+
     useEffect(() => {
         async function fetchData () {
         try {
             const response = await fetch(`http://localhost:5000/campgrounds/${id}`);
             const json = await response.json();
+            setTitle(json.title);
+            setLocation(json.location);
+            setPrice(json.price);
+            setDescription(json.description);
             setCampgroundState(json);
             setLoaded(true);        
             //console.log(campgroundState);
         } catch (error) {}
         }
-        // if (campgroundState.length === 0 ) { 
-        //   fetchData() 
-        // }
-        
+
         fetchData();
-    }, [campgroundState]);
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e.nativeEvent.target[0].value,
+        console.log(e.nativeEvent.target,
+                    e.nativeEvent.target[0].value,
                     e.nativeEvent.target[1].value,
                     e.nativeEvent.target[2].value,
-                    e.nativeEvent.target[3].value)
+                    e.nativeEvent.target[3].value,
+                    e.nativeEvent.target[4].value)
         const data = {
             campground: {
                 title: e.nativeEvent.target[0].value,
@@ -45,13 +53,15 @@ export default function EditCampground() {
             files: {}
         };
 
-        fetch(`http://localhost:5000/camprounds/${id}?_method=PUT`, {
+        fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {
+            //fetch(('http://localhost:5000/campgrounds/' + id + '?_method=PUT'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
             body: JSON.stringify(data)
+
         }).then((res) => {
             console.log("response", res);
             if (res.status === 200) {
@@ -60,6 +70,11 @@ export default function EditCampground() {
             //TODO: Error handling
         })
     };
+
+    const handleTitleChange = (e) => { setTitle(e.target.value) };
+    const handlePriceChange = (e) => { setPrice(e.target.value) };
+    const handleDescriptionChange = (e) => { setDescription(e.target.value) };
+    const handleLocationChange = (e) => { setLocation(e.target.value) };
 
     return (
         <div>
@@ -71,25 +86,37 @@ export default function EditCampground() {
                         <div className="mb-3">
                             <Form.Group controlId="title" >
                                 <Form.Label>Title</Form.Label>
-                                <Form.Control type="text" name="title"  placeholder={campgroundState.title} />
+                                <Form.Control type="text" 
+                                              name="title"  
+                                              value={title} 
+                                              onChange={handleTitleChange}/>
                             </Form.Group>
                         </div>
                         <div className="mb-3">
                             <Form.Group controlId="location" >
                                 <Form.Label>Location</Form.Label>
-                                <Form.Control type="text" name="location"  placeholder={campgroundState.location} />
+                                <Form.Control type="text" 
+                                              name="location"  
+                                              value={location}
+                                              onChange={handleLocationChange}/>
                             </Form.Group>
                         </div>
                         <div className="mb-3">
                             <Form.Group controlId="price" >
                                 <Form.Label>Campground Price</Form.Label>
-                                <Form.Control type="number" name="price"  placeholder={campgroundState.price} />
+                                <Form.Control type="number" 
+                                              name="price"  
+                                              value={price} 
+                                              onChange={handlePriceChange}/>
                             </Form.Group>
                         </div>
                         <div className="mb-3">
                             <Form.Group controlId="description" >
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control type="text" name="description"  placeholder={campgroundState.description} />
+                                <Form.Control type="text" 
+                                              name="description"   
+                                              value={description} 
+                                              onChange={handleDescriptionChange}/>
                             </Form.Group>
                         </div>
                         <div className="mb-3">

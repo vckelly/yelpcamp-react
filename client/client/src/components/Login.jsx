@@ -45,7 +45,7 @@ export default function Login() {
             else {
                 toast.error('Username or password was incorrect. Try again.', {
                     position: "top-right",
-                    autoClose: 1500,
+                    autoClose: 2500,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
@@ -62,17 +62,7 @@ export default function Login() {
 
     return (
         <div> 
-            <ToastContainer
-                position="top-right"
-                autoClose={1500}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
+            <ToastContainer />
             <Container>
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
