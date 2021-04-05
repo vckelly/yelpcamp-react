@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react'
-import { Redirect, useHistory } from "react-router-dom"; 
+import { Redirect, useHistory, useLocation } from "react-router-dom"; 
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
@@ -13,9 +13,9 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function Login() {
 
     const history = useHistory();
+    const location = useLocation();
     let [userName, setUserName] = useState('');
     let [pw, setPw] = useState('');
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -43,12 +43,15 @@ export default function Login() {
                 })
             }
             else {
-                history.push({
-                    pathname: '/login',
-                    state: { 
-                        from: 'login'
-                    }
-                })
+                toast.error('Username or password was incorrect. Try again.', {
+                    position: "top-right",
+                    autoClose: 1500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
             //TODO: Error handling
         })
@@ -59,6 +62,17 @@ export default function Login() {
 
     return (
         <div> 
+            <ToastContainer
+                position="top-right"
+                autoClose={1500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
             <Container>
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
