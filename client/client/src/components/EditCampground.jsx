@@ -55,6 +55,7 @@ export default function EditCampground() {
 
         fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {
             //fetch(('http://localhost:5000/campgrounds/' + id + '?_method=PUT'), {
+            credentials: 'include',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

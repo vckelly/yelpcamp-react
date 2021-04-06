@@ -37,7 +37,7 @@ function ShowCampground() {
         const json = await response.json();
         setCampgroundState(json);
         setLoaded(true);        
-        //console.log(campgroundState);
+        console.log(json);
       } catch (error) {}
     }
     // if (campgroundState.length === 0 ) { 
@@ -45,7 +45,7 @@ function ShowCampground() {
     // }
     
     fetchData();
-  }, [campgroundState]);
+  }, []);
 
   //console.log(campgroundState);
   return (
