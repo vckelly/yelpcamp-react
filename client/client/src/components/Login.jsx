@@ -1,5 +1,6 @@
-import { React, useEffect, useState } from 'react'
+import { React, useEffect, useState, useContext } from 'react'
 import { Redirect, useHistory, useLocation } from "react-router-dom"; 
+import { UserContext } from '../UserContext.js'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
@@ -14,6 +15,7 @@ export default function Login() {
 
     const history = useHistory();
     const location = useLocation();
+    const { user, setUser } = useContext(UserContext);
     let [userName, setUserName] = useState('');
     let [pw, setPw] = useState('');
 
@@ -34,6 +36,7 @@ export default function Login() {
             },
             body: JSON.stringify(data)
         }).then((res) => {
+            console.log(res.user);
             if (res.url.includes('/campgrounds')) {
                 history.push({
                     pathname: '/campgrounds',

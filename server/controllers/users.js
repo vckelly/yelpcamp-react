@@ -25,11 +25,15 @@ module.exports.renderLogin = (req, res) => {
   res.render('users/login')
 };
 
-module.exports.login = (req, res) => {
-  req.flash('success', 'Welcome Back!');
+module.exports.login = async (req, res) => {
+  const userName = req.body.username;
+  const user = await User.find({ username: userName });
+  if (user) { res.append('User', JSON.stringify(user)) };
   const redirectUrl = req.session.returnTo || '/campgrounds';
   delete req.session.returnTo;
-  res.redirect(redirectUrl);
+  res.render(redirectUrl);
+  //res.redirect(redirectUrl);
+  
 };
 
 module.exports.logout = (req, res) => {
