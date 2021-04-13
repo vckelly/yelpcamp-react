@@ -1,9 +1,6 @@
 const Campground = require('../models/campground');
 const User = require('../models/user');
 
-module.exports.renderRegister = (req, res) => {
-  res.render('users/register');
-};
 
 module.exports.register = async (req, res, next) => {
   try {
@@ -21,20 +18,23 @@ module.exports.register = async (req, res, next) => {
   } 
 };
 
-module.exports.renderLogin = (req, res) => {
-  res.render('users/login')
-};
 
 module.exports.login = async (req, res) => {
-  const userName = req.body.username;
-  const user = await User.find({ username: userName });
-  if (user) { res.append('User', JSON.stringify(user)) };
+  console.log('login', req.body, req.session);
   const redirectUrl = req.session.returnTo || '/campgrounds';
   delete req.session.returnTo;
-  res.render(redirectUrl);
-  //res.redirect(redirectUrl);
-  
+  res.redirect(redirectUrl);
 };
+
+module.exports.getCurrentUser = async (req, res) => {
+  //console.log('From getCurrentUser', req.session);
+  const user = await User.find({ username: req.body.username});
+  if (user) {
+    return res.status(200).json(user)
+  }
+
+  res.status(404).send({ error: 'Could not find user'});
+}
 
 module.exports.logout = (req, res) => {
   req.logout();

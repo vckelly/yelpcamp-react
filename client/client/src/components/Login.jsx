@@ -36,13 +36,26 @@ export default function Login() {
             },
             body: JSON.stringify(data)
         }).then((res) => {
-            console.log(res.user);
-            if (res.url.includes('/campgrounds')) {
-                history.push({
-                    pathname: '/campgrounds',
-                    state: { 
-                        from: 'login'
-                    }
+            console.log(res);
+            
+            if (res.ok) {
+                //TODO: set user context + session data
+                fetch('http://localhost:5000/users/current' , {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data.username)
+                })
+                .then((res) => {
+                    console.log(res);
+                    history.push({
+                        pathname: '/campgrounds',
+                        state: { 
+                            from: 'login'
+                        }
+                    })
                 })
             }
             else {

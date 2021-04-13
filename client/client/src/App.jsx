@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Home from './components/Home.jsx';
 import Campgrounds from './components/Campgrounds.jsx';
+import NewCampground from './components/NewCampground.jsx';
 import EditCampground from './components/EditCampground.jsx';
 import ShowCampground from './components/ShowCampground.jsx';
 import Register from './components/Register.jsx';
@@ -22,6 +23,10 @@ function App() {
 
           <Route path="/campgrounds/:id/edit">
             <EditCampground />
+          </Route>
+
+          <Route path="/campgrounds/new">
+            <NewCampground />
           </Route>
 
           <Route path="/campgrounds/:id">

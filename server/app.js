@@ -35,15 +35,6 @@ db.once("open", () => {
   console.log("Database connected");
 });
 
-// const MongoClient = require('mongodb').MongoClient;
-// const uri = "mongodb+srv://vckelly@gmail.com:blue3434@cluster0.e940d.mongodb.net/yelpcamp?retryWrites=true&w=majority";
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-// client.connect(err => {
-//   const collection = client.db("test").collection("devices");
-//   // perform actions on the collection object
-//   client.close();
-// });
-
 const app = express();
 
 app.engine('ejs', ejsMate);
@@ -112,7 +103,7 @@ app.use(
               "'self'",
               "blob:",
               "data:",
-              "https://res.cloudinary.com/vckelly/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
+              "https://res.cloudinary.com/vckelly/", 
               "https://images.unsplash.com/",
           ],
           fontSrc: ["'self'", ...fontSrcUrls],

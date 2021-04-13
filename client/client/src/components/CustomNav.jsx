@@ -14,6 +14,7 @@ export default function CustomNav() {
                     <Nav className="mr-auto">
                         <Nav.Link href="/home">Home</Nav.Link>
                         <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
+                        <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
                         <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
