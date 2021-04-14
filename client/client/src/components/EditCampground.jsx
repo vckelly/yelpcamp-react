@@ -65,7 +65,7 @@ export default function EditCampground() {
 
         }).then((res) => {
             console.log("response", res);
-            if (res.status === 200) {
+            if (res.ok) {
                 setRedirect(true);
             }
             //TODO: Error handling

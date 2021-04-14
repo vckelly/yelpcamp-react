@@ -13,7 +13,7 @@ router.route('/login')
       .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), users.login);
       
 router.route('/users/current')
-      //.get(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), users.getCurrentUser);
+      //.post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), users.getCurrentUser);
       .post(users.getCurrentUser);
 
 router.get('/logout', users.logout);

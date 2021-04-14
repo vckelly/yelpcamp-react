@@ -27,7 +27,7 @@ module.exports.login = async (req, res) => {
 };
 
 module.exports.getCurrentUser = async (req, res) => {
-  //console.log('From getCurrentUser', req.session);
+  console.log('From getCurrentUser', req.body, req.session);
   const user = await User.find({ username: req.body.username});
   if (user) {
     return res.status(200).json(user)

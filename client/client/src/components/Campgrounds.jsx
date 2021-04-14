@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useHistory, useLocation } from "react-router-dom"; 
 import Campground from './Campground.jsx';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { UserContext } from '../UserContext.js';
 
 function Campgrounds() {
 
   let history = useHistory();
   let location = useLocation();
+  let user = useContext(UserContext);
+  console.log(user);
 
   const [campgroundState, setCampgroundState] = useState([]);
 

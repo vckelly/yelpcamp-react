@@ -42,14 +42,22 @@ export default function Login() {
                 //TODO: set user context + session data
                 fetch('http://localhost:5000/users/current' , {
                     method: 'POST',
+                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'Access-Control-Allow-Origin': 'http://localhost:3000',
+                        'Access-Control-Allow-Credentials': true
                     },
-                    body: JSON.stringify(data.username)
+                    body: JSON.stringify({ username: data.username })
                 })
                 .then((res) => {
-                    console.log(res);
+                    res.json()
+                    .then((user) => {
+                        console.log(user)
+                        setUser(user);
+                    });
+                    
                     history.push({
                         pathname: '/campgrounds',
                         state: { 
