@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useHistory, useLocation } from "react-router-dom"; 
 import Campground from './Campground.jsx';
+import { UserContext } from '../UserContext.js';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { UserContext } from '../UserContext.js';
+
 
 function Campgrounds() {
 
