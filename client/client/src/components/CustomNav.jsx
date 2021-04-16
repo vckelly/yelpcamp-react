@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
@@ -7,9 +7,12 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import { UserContext } from '../UserContext.js';
 
 export default function CustomNav() {
+
+    const { user, setUser } = useContext(UserContext);
+    console.log('From nav', user, setUser);
     return (
         <UserContext.Consumer>
-            {(user, setUser) => 
+            { user => 
                 <Navbar bg="dark" expand="lg" variant="lg" sticky="top">
                     <Container className="fluid">
                         <Navbar.Brand href="/home">ReactCamp</Navbar.Brand>
@@ -18,12 +21,12 @@ export default function CustomNav() {
                             <Nav className="mr-auto">
                                 <Nav.Link href="/home">Home</Nav.Link>
                                 <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
-                                { user ? (
+                                { user !== null ? (
                                     <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
                                 ) : ('')}
                             </Nav>
                             <Nav className="justify-content-end" activeKey="/home">
-                                { user ? 
+                                { user !== null ? 
                                     (<Nav.Item>
                                         <Nav.Link href="/logout">Logout</Nav.Link>
                                     </Nav.Item>): 
@@ -40,7 +43,7 @@ export default function CustomNav() {
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
-            </Navbar>
+                </Navbar>
             }
         </UserContext.Consumer>
     )

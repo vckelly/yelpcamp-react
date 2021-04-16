@@ -15,7 +15,7 @@ export default function Login() {
 
     const history = useHistory();
     const location = useLocation();
-    const { user, setUser } = useContext(UserContext);
+    let { userCon, setUser } = useContext(UserContext);
     let [userName, setUserName] = useState('');
     let [pw, setPw] = useState('');
 

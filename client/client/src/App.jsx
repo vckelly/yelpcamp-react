@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Home from './components/Home.jsx';
 import Campgrounds from './components/Campgrounds.jsx';
 import NewCampground from './components/NewCampground.jsx';
@@ -6,51 +6,60 @@ import EditCampground from './components/EditCampground.jsx';
 import ShowCampground from './components/ShowCampground.jsx';
 import Register from './components/Register.jsx';
 import Login from './components/Login.jsx';
+import Logout from './components/Logout.jsx';
 import CustomNav from './components/CustomNav.jsx';
 import { UserContext } from './UserContext.js';
 import './App.css';
-import { Route, Switch } from "react-router-dom";
+import { Route, Router, Switch } from "react-router-dom";
 
 function App() {
 
-  const [user, setUser] = useState(null);
+  //const user = useContext(UserContext);
+  const [user, setUser] = useState('Hi from app');
+
+  console.log("From app", user, setUser)
 
   return (
-    <div className="App">
-      <UserContext.Provider value={ user, setUser }>
-        <CustomNav></CustomNav>
-        <Switch>
+    
+      <div className="App">
+          <CustomNav />
+          <Switch>
 
-          <Route path="/campgrounds/:id/edit">
-            <EditCampground />
-          </Route>
+            <Route path="/campgrounds/:id/edit">
+              <EditCampground />
+            </Route>
 
-          <Route path="/campgrounds/new">
-            <NewCampground />
-          </Route>
+            <Route path="/campgrounds/new">
+              <NewCampground />
+            </Route>
 
-          <Route path="/campgrounds/:id">
-            <ShowCampground />
-          </Route>
+            <Route path="/campgrounds/:id">
+              <ShowCampground />
+            </Route>
 
-          <Route path="/campgrounds">
-            <Campgrounds />
-          </Route>
+            <Route path="/campgrounds">
+              <Campgrounds />
+            </Route>
 
-          <Route path="/register">
-            <Register />
-          </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
 
-          <Route path="/login">
-            <Login />
-          </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
 
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </UserContext.Provider>
-    </div>
+            <Route path="/logout">
+              <Logout />
+            </Route>
+
+            <Route path="/">
+              <Home />
+            </Route>
+
+          </Switch>
+      </div>
+
   );
 }
 

@@ -11,8 +11,8 @@ function Campgrounds() {
 
   let history = useHistory();
   let location = useLocation();
-  let user = useContext(UserContext);
-  console.log(user);
+  const { user, setUser } = useContext(UserContext);
+  console.log('From campgrounds', user, setUser);
 
   const [campgroundState, setCampgroundState] = useState([]);
 

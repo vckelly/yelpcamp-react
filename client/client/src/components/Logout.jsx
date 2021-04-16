@@ -1,16 +1,20 @@
-import { React, useEffect, useState, useContext } from 'react'
+import { React, useEffect, useState, useContext } from 'react';
 import { Redirect, useHistory, useLocation } from "react-router-dom"; 
-import { UserContext } from '../UserContext.js'
+import { UserContext } from '../UserContext.js';
 
+import Button from 'react-bootstrap/Button';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Logout() {
 
     const { user, setUser } = useContext(UserContext);
+    const history = useHistory();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        console.log('From logout', user, setUser);
         
         fetch('http://localhost:5000/logout', {
             method: 'GET',
@@ -19,7 +23,7 @@ export default function Logout() {
                 'Accept': 'application/json'
             }
         }).then((res) => {
-            console.log(res);
+            console.log('From logout', res);
             
             if (res.ok) {
                     setUser(null);
