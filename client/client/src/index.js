@@ -10,9 +10,7 @@ import { UserContext } from './UserContext.js';
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <UserContext.Provider>
-        <App />
-      </UserContext.Provider>
+      <App />
     </Router>
   </React.StrictMode>,
   document.getElementById('root')

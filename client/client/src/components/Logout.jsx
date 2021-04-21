@@ -8,13 +8,15 @@ import 'react-toastify/dist/ReactToastify.css';
 
 export default function Logout() {
 
-    const { user, setUser } = useContext(UserContext);
+    const [user, setUser] = useContext(UserContext);
     const history = useHistory();
+
+    console.log('From logout', user, setUser);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log('From logout', user, setUser);
+        
         
         fetch('http://localhost:5000/logout', {
             method: 'GET',

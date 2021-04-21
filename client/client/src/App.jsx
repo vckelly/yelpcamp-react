@@ -15,12 +15,12 @@ import { Route, Router, Switch } from "react-router-dom";
 function App() {
 
   //const user = useContext(UserContext);
-  const [user, setUser] = useState('Hi from app');
+  const contextHook = useState(null);
 
-  console.log("From app", user, setUser)
+  //console.log("From app", user, setUser)
 
   return (
-    
+    <UserContext.Provider value = {contextHook}>
       <div className="App">
           <CustomNav />
           <Switch>
@@ -59,7 +59,7 @@ function App() {
 
           </Switch>
       </div>
-
+    </UserContext.Provider>
   );
 }
 

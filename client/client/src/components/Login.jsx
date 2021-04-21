@@ -15,7 +15,7 @@ export default function Login() {
 
     const history = useHistory();
     const location = useLocation();
-    let { userCon, setUser } = useContext(UserContext);
+    let [userCon, setUser] = useContext(UserContext);
     let [userName, setUserName] = useState('');
     let [pw, setPw] = useState('');
 
@@ -54,7 +54,7 @@ export default function Login() {
                 .then((res) => {
                     res.json()
                     .then((user) => {
-                        console.log(user)
+                        //console.log(user)
                         setUser(user);
                     });
                     
