@@ -22,6 +22,8 @@ const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const userRoutes = require('./routes/users');
 
+const MongoStore = require('connect-mongo')(session);
+
 mongoose.connect('mongodb://localhost:27017/yelpcamp', {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -33,6 +35,11 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, 'connection error:'));
 db.once("open", () => {
   console.log("Database connected");
+});
+
+const sessionStore = new MongoStore({
+  mongooseConnection: db,
+  collection: 'sessions' 
 });
 
 const app = express();
@@ -57,7 +64,7 @@ const sessionConfig = {
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    //secure: true,
+    secure: false,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7
   }
@@ -119,6 +126,13 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// app.use((req, res, next) => {
+//   const { url } = req;
+//   const isCookieSent = req.headers.cookie;
+//   console.log({ url });
+//   console.log({ isCookieSent });
+//   next();
+// });
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;

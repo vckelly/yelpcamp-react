@@ -4,6 +4,7 @@ const User = require('../models/user');
 
 
 module.exports.register = async (req, res, next) => {
+  //TODO: search existing users for email / username in req  
   try {
     const { email, username, password } = req.body;
     const user = new User({ email, username });
@@ -27,10 +28,18 @@ module.exports.login = async (req, res) => {
   res.redirect(redirectUrl);
 };
 
+module.exports.loggedIn = async (req, res) => {
+  console.log('loggedIn', req.body, req.session);
+  if (req.session.passport && req.session.passport.user) {
+    res.status(200).json({ user: req.session.passport.user });
+  }
+  res.status(200).send(null);
+};
+
 module.exports.getCurrentUser = async (req, res) => {
   const user = await User.find({ username: req.body.username});
   if (user) {
-    return res.status(200).json(user)
+    return res.status(200).send(user)
   }
 
   res.status(404).send({ error: 'Could not find user'});

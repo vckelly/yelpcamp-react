@@ -16,6 +16,9 @@ router.route('/users/current')
       //.post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), users.getCurrentUser);
       .post(users.getCurrentUser);
 
+router.route('/users/logged_in')
+      .get(users.loggedIn)
+
 router.get('/logout', users.logout);
 
 module.exports = router;

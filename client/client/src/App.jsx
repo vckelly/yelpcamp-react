@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Home from './components/Home.jsx';
 import Campgrounds from './components/Campgrounds.jsx';
 import NewCampground from './components/NewCampground.jsx';
@@ -15,9 +15,29 @@ import { Route, Router, Switch } from "react-router-dom";
 function App() {
 
   //const user = useContext(UserContext);
-  const contextHook = useState(null);
+  const contextHook = useState(useContext(UserContext));
 
   //console.log("From app", user, setUser)
+
+  useEffect(() => {
+    fetch('http://localhost:5000/users/logged_in', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': 'http://localhost:3000/*',
+          'Access-Control-Allow-Credentials': true
+      }
+    }).then((res) => {
+      console.log('********from logged_in fetch*******', res, contextHook)
+      res.json()
+      .then((user) => {
+        console.log('user from res', user); 
+        contextHook[1](user);
+      })
+    })
+  }, []);  
 
   return (
     <UserContext.Provider value = {contextHook}>

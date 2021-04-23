@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-function Campgrounds() {
+export default function Campgrounds() {
 
   let history = useHistory();
   let location = useLocation();
@@ -19,7 +19,16 @@ function Campgrounds() {
   useEffect(() => {
     async function fetchData () {
       try {
-        const response = await fetch('http://localhost:5000/campgrounds');
+        const response = await fetch('http://localhost:5000/campgrounds', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Access-Control-Allow-Origin': 'http://localhost:3000',
+              'Access-Control-Allow-Credentials': true
+          }
+      });
         const json = await response.json();
 
         setCampgroundState(json)
@@ -59,5 +68,5 @@ function Campgrounds() {
     </div>
   );
 }
-export default Campgrounds;
+
 

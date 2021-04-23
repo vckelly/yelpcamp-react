@@ -20,6 +20,7 @@ export default function Logout() {
         
         fetch('http://localhost:5000/logout', {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
