@@ -10,14 +10,10 @@ router.route('/register')
 
 
 router.route('/login')
-      .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), users.login);
+      .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), catchAsync(users.login));
       
-router.route('/users/current')
-      //.post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), users.getCurrentUser);
-      .post(users.getCurrentUser);
-
 router.route('/users/logged_in')
-      .get(users.loggedIn)
+      .get(catchAsync(users.loggedIn))
 
 router.get('/logout', users.logout);
 

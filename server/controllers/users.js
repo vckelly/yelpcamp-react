@@ -7,15 +7,21 @@ module.exports.register = async (req, res, next) => {
   //TODO: search existing users for email / username in req  
   try {
     const { email, username, password } = req.body;
+    const emailCheck = await User.findOne({ email: email });
+    if (emailCheck) {
+      return res.status(422).json({ error: 'That email is already in use!'})
+    } 
+    const userCheck = await User.findOne({ username: username });
+    if (userCheck) {
+      return res.status(422).json({ error: 'That username is already in use!'})
+    } 
     const user = new User({ email, username });
     const registeredUser = await User.register(user, password);
     req.login(registeredUser, err => { 
       if (err) return next(err);
-      req.flash('Success', 'Welcome to Yelp Camp!');
       res.redirect('/campgrounds');
     })
   } catch (e){
-    req.flash('error', e.message);
     res.redirect('register')
   } 
 };
@@ -35,15 +41,6 @@ module.exports.loggedIn = async (req, res) => {
   }
   res.status(200).send(null);
 };
-
-module.exports.getCurrentUser = async (req, res) => {
-  const user = await User.find({ username: req.body.username});
-  if (user) {
-    return res.status(200).send(user)
-  }
-
-  res.status(404).send({ error: 'Could not find user'});
-}
 
 module.exports.logout = (req, res) => {
   req.logout();

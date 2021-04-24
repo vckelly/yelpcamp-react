@@ -6,20 +6,28 @@ import Container from 'react-bootstrap/Container'
 import Image from 'react-bootstrap/Image'
 import Form from 'react-bootstrap/Form'
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function Register() {
 
     const [redirect, setRedirect] = useState(false);
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e.nativeEvent.target[0].value);
-
         const data = {
             email: e.nativeEvent.target[0].value,
             username: e.nativeEvent.target[1].value,
             password: e.nativeEvent.target[2].value
         };
+
+        setEmail('');
+        setUsername('');
+        setPassword('');
 
         fetch('http://localhost:5000/register', {
             method: 'POST',
@@ -33,9 +41,27 @@ export default function Register() {
             if (res.status === 200) {
                 setRedirect(true);
             }
-            //TODO: Error handling
+            else {
+                res.json()
+                .then((resJSON) => {
+                    console.log(resJSON);
+                    toast.error(resJSON['error'], {
+                        position: "top-right",
+                        autoClose: 2500,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                })
+            }
         })
     };
+
+    const handleEmailChange = (e) => { setEmail(e.target.value) };
+    const handleUsernameChange = (e) => { setUsername(e.target.value) };
+    const handlePasswordChange = (e) => { setPassword(e.target.value) };
 
     return (
         <div>
@@ -43,8 +69,9 @@ export default function Register() {
             <Redirect 
                 to={{ pathname: "/campgrounds"}}
             />
-        ) : (    
+        ) : (
             <Container>
+            <ToastContainer />
                 <div className="row">
                     <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
                         <Card variant="shadow">
@@ -55,19 +82,28 @@ export default function Register() {
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group controlId="email" >
                                         <Form.Label>Email address</Form.Label>
-                                        <Form.Control type="email" name="email"  placeholder="Enter email" />
+                                        <Form.Control type="email" 
+                                                      name="email"  
+                                                      value={email}
+                                                      onChange={handleEmailChange}/>
                                         <Form.Text className="text-muted">
                                         We'll never share your email with anyone else.
                                         </Form.Text>
                                     </Form.Group>
                                     <Form.Group controlId="username">
                                         <Form.Label>Username</Form.Label>
-                                        <Form.Control type="username" name="username" placeholder="Enter username" />
+                                        <Form.Control type="username" 
+                                                      name="username" 
+                                                      value={username}
+                                                      onChange={handleUsernameChange}/>
                                     </Form.Group>
 
                                     <Form.Group controlId="password">
                                         <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" name="password" placeholder="Password" />
+                                        <Form.Control type="password" 
+                                                      name="password" 
+                                                      value={password}
+                                                      onChange={handlePasswordChange}/>
                                     </Form.Group>
                                     <Button variant="success" type="submit">Register</Button>{' '}
                                 </Form>

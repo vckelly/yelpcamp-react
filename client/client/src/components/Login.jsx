@@ -37,28 +37,8 @@ export default function Login() {
             },
             body: JSON.stringify(data)
         }).then((res) => {
-            console.log(res);
-            
-            if (res.ok) {
-                //TODO: set user context + session data
-                // fetch('http://localhost:5000/users/current' , {
-                //     method: 'POST',
-                //     credentials: 'include',
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //         'Accept': 'application/json',
-                //         'Access-Control-Allow-Origin': 'http://localhost:3000',
-                //         'Access-Control-Allow-Credentials': true
-                //     },
-                //     body: JSON.stringify({ username: data.username })
-                // })
-                // .then((res) => {
-                //     res.json()
-                //     .then((user) => {
-                //         //console.log(user)
-                //         setUser(user);
-                //     });
-                    
+            //console.log(res);
+            if (res.ok) {                   
                     history.push({
                         pathname: '/campgrounds',
                         state: { 
