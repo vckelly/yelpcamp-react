@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from "react-router-dom";
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card';
@@ -8,17 +8,7 @@ import { Link } from "react-router-dom";
 import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
 import Rating from '@material-ui/lab/Rating';
-
-
-// const getCampgrounds = async () => {
-//   try {
-//     const resp = await axios.get('http://localhost:5000/campgrounds');
-//     console.log(resp.data);
-//   } catch (err) {
-//       // Handle Error Here
-//     console.error(err);
-//   }
-// };
+import { UserContext } from '../UserContext.js';
 
 function ShowCampground() {
 
@@ -26,9 +16,7 @@ function ShowCampground() {
   const [campgroundState, setCampgroundState] = useState(null);
   const [isDataLoaded, setLoaded] = useState(false);
 
-  const handleClick = () => {
-
-  }
+  const [user, setUser] = useContext(UserContext);
 
   useEffect(() => {
     async function fetchData () {
@@ -37,17 +25,12 @@ function ShowCampground() {
         const json = await response.json();
         setCampgroundState(json);
         setLoaded(true);        
-        console.log(json);
       } catch (error) {}
     }
-    // if (campgroundState.length === 0 ) { 
-    //   fetchData() 
-    // }
     
     fetchData();
   }, []);
 
-  //console.log(campgroundState);
   return (
     <div className="row">
       <h1>ShowCampground!</h1>
@@ -83,7 +66,10 @@ function ShowCampground() {
                 <ListGroup.Item>{"Submitted by " + campgroundState.author.username}</ListGroup.Item>
                 <ListGroup.Item>{"$" + campgroundState.price + "/night"}</ListGroup.Item>
               </ListGroup>
-              <Link to={`/campgrounds/${id}/edit`} className="btn btn-success">Edit Campground</Link>
+              { user && user['user'] === campgroundState.author.username ? (
+                <Link to={`/campgrounds/${id}/edit`} className="btn btn-success">Edit Campground</Link>)
+                : ('')
+              }              
               <div className="col-6 text-muted">
                 2 days ago
               </div>
@@ -91,12 +77,16 @@ function ShowCampground() {
           </div>) : (<Spinner animation="border" />)
         }
         <div className="col-6">
-          <h2>Leave a Review</h2>
-          <Form>
-            <Form.Group controlId="ratingStars">
-              <Rating name="pristine" />
-            </Form.Group>
-          </Form>
+        { user ? (
+          <>
+            <h2>Leave a Review</h2>
+            <Form>
+              <Form.Group controlId="ratingStars">
+                <Rating name="pristine" />
+              </Form.Group>
+            </Form>
+          </>
+        ) : ('')}
         </div>
       </div>
   )
