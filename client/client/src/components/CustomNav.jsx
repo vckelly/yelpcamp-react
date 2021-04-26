@@ -11,35 +11,35 @@ export default function CustomNav() {
     const [user, setUser] = useContext(UserContext);
     //console.log('From nav', user, setUser);
     return (
-            <Navbar bg="dark" expand="lg" variant="lg" sticky="top">
-                <Container className="fluid">
-                    <Navbar.Brand href="/home">ReactCamp</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Nav.Link href="/home">Home</Nav.Link>
-                            <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
-                            { user ? (
-                                <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
-                            ) : ('')}
-                        </Nav>
-                        <Nav className="justify-content-end" activeKey="/home">
-                            { user ? 
-                                (<Nav.Item>
-                                    <Nav.Link href="/logout">Logout</Nav.Link>
-                                </Nav.Item>): 
-                                (<>
-                                <Nav.Item>
-                                    <Nav.Link href="/register">Register</Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item>
-                                    <Nav.Link href="/login">Login</Nav.Link>
-                                </Nav.Item>
-                                </>)
-                            }
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+        <Navbar bg="dark" expand="lg" variant="lg" sticky="top">
+            <Container className="fluid">
+                <Navbar.Brand href="/home">ReactCamp</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="mr-auto">
+                        <Nav.Link href="/home">Home</Nav.Link>
+                        <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
+                        { user ? (
+                            <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
+                        ) : ('')}
+                    </Nav>
+                    <Nav className="justify-content-end" activeKey="/home">
+                        { user ? 
+                            (<Nav.Item>
+                                <Nav.Link href="/logout">Logout</Nav.Link>
+                            </Nav.Item>): 
+                            (<>
+                            <Nav.Item>
+                                <Nav.Link href="/register">Register</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link href="/login">Login</Nav.Link>
+                            </Nav.Item>
+                            </>)
+                        }
+                    </Nav>
+                </Navbar.Collapse>
+            </Container>
+        </Navbar>
     )
 };

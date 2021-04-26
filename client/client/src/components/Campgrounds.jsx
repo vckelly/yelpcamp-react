@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useHistory, useLocation } from "react-router-dom"; 
 import Campground from './Campground.jsx';
 import { UserContext } from '../UserContext.js';
-
+import Spinner from 'react-bootstrap/Spinner';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -11,6 +11,7 @@ export default function Campgrounds() {
 
   let history = useHistory();
   let location = useLocation();
+  let [isDataLoaded, setDataLoaded] = useState('false');
   const [user, setUser] = useContext(UserContext);
   //console.log('From campgrounds', user, setUser);
 
@@ -28,20 +29,19 @@ export default function Campgrounds() {
               'Access-Control-Allow-Origin': 'http://localhost:3000',
               'Access-Control-Allow-Credentials': true
           }
-      });
+        });
         const json = await response.json();
-
-        setCampgroundState(json)
-
+        setCampgroundState(json);
       } catch (error) {}
     }
     if (campgroundState.length === 0) {
       fetchData();
-    }
-  }, [campgroundState]);
+      setDataLoaded(true);
+    }  
+  }, [campgroundState, isDataLoaded]);
 
   useEffect(() => {
-
+    setDataLoaded(false);
     if (location.state && location.state.from === 'login') {
       toast.success('Welcome Back!', {
         position: "top-right",
@@ -56,15 +56,19 @@ export default function Campgrounds() {
   }, []);
 
   return (
-    <div className="Campground">
+    <div className="Campgrounds">
       <ToastContainer />
       <h1>Campgrounds!</h1>
-      { campgroundState.map((camp) => (
-        <Campground
-          key={camp.id}
-          campground={camp}
-        />
-      ))}
+      { isDataLoaded ? (
+        <>
+        { campgroundState.map((camp) => (
+          <Campground
+            key={camp.id}
+            campground={camp}
+          />))}
+        </>
+        ) : (<Spinner animation="border" />)
+      }
     </div>
   );
 }
