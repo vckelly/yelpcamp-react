@@ -37,12 +37,12 @@ export default function EditCampground() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e.nativeEvent.target,
-                    e.nativeEvent.target[0].value,
-                    e.nativeEvent.target[1].value,
-                    e.nativeEvent.target[2].value,
-                    e.nativeEvent.target[3].value,
-                    e.nativeEvent.target[4].value)
+        // console.log(e.nativeEvent.target,
+        //             e.nativeEvent.target[0].value,
+        //             e.nativeEvent.target[1].value,
+        //             e.nativeEvent.target[2].value,
+        //             e.nativeEvent.target[3].value,
+        //             e.nativeEvent.target[4].value)
         const data = {
             campground: {
                 title: e.nativeEvent.target[0].value,
@@ -52,7 +52,7 @@ export default function EditCampground() {
             },
             files: {}
         };
-
+        console.log(data);
         fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {
             //fetch(('http://localhost:5000/campgrounds/' + id + '?_method=PUT'), {
             credentials: 'include',

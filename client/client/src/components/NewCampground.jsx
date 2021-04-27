@@ -59,8 +59,9 @@ export default function NewCampground() {
             body: JSON.stringify(data)
 
         }).then((res) => {
-            console.log("response", res.blob());
+            console.log("response", res);
             if (res.status === 200) {
+                //TODO: Add success toast and redirect to newly created campground url
                 setRedirect(true);
             }
             //TODO: Error handling

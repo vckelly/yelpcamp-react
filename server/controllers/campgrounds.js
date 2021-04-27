@@ -58,10 +58,12 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
-    console.log("FROM CONTROLLER", req.body);
+    //console.log("FROM CONTROLLER", req.body);
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    campground.images.push(...imgs);
+    if (req.files) {
+        const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+        campground.images.push(...imgs);
+    }
     await campground.save();
     if (req.body.deleteImages) {
         for (let filename of req.body.deleteImages) {
@@ -70,6 +72,7 @@ module.exports.updateCampground = async (req, res) => {
         await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
     }
     //req.flash('success', 'Successfully updated campground!');
+    //console.log("Successfully updated campground!");
     res.redirect(`/campgrounds/${campground._id}`)
 }
 

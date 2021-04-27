@@ -18,6 +18,8 @@ function ShowCampground() {
 
   const [user, setUser] = useContext(UserContext);
 
+  //TODO: Add delete button/functionality
+
   useEffect(() => {
     async function fetchData () {
       try {

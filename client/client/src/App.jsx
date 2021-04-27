@@ -30,10 +30,10 @@ function App() {
           'Access-Control-Allow-Credentials': true
       }
     }).then((res) => {
-      console.log('********from logged_in fetch*******', res, contextHook)
+      //console.log('********from logged_in fetch*******', res, contextHook)
       res.json()
       .then((user) => {
-        console.log('user from res', user); 
+        //console.log('user from res', user); 
         contextHook[1](user);
       })
     })

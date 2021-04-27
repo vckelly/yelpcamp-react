@@ -32,11 +32,12 @@ export default function Campgrounds() {
         });
         const json = await response.json();
         setCampgroundState(json);
+        setDataLoaded(true);
       } catch (error) {}
     }
     if (campgroundState.length === 0) {
+      //fetchData().then(() => setDataLoaded(true));
       fetchData();
-      setDataLoaded(true);
     }  
   }, [campgroundState, isDataLoaded]);
 
@@ -67,7 +68,7 @@ export default function Campgrounds() {
             campground={camp}
           />))}
         </>
-        ) : (<Spinner animation="border" />)
+        ) : (<Spinner animation="border" role="status"/>)
       }
     </div>
   );

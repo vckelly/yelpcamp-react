@@ -4,7 +4,6 @@ const User = require('../models/user');
 
 
 module.exports.register = async (req, res, next) => {
-  //TODO: search existing users for email / username in req  
   try {
     const { email, username, password } = req.body;
     const emailCheck = await User.findOne({ email: email });
@@ -28,16 +27,16 @@ module.exports.register = async (req, res, next) => {
 
 
 module.exports.login = async (req, res) => {
-  console.log('login', req.body, req.session);
+  //console.log('login', req.body, req.session);
   const redirectUrl = req.session.returnTo || '/campgrounds';
   delete req.session.returnTo;
   res.redirect(redirectUrl);
 };
 
 module.exports.loggedIn = async (req, res) => {
-  console.log('loggedIn', req.body, req.session);
+  //console.log('loggedIn', req.body, req.session);
   if (req.session.passport && req.session.passport.user) {
-    res.status(200).json({ user: req.session.passport.user });
+    return res.status(200).json({ user: req.session.passport.user });
   }
   res.status(200).send(null);
 };
