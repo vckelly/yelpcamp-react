@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react'
-import { Redirect, useParams } from "react-router-dom"; 
+import { useParams, useHistory } from "react-router-dom"; 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Spinner from 'react-bootstrap/Spinner';
@@ -8,10 +8,9 @@ import Spinner from 'react-bootstrap/Spinner';
 export default function EditCampground() {
 
     let { id } = useParams();
-    const [redirect, setRedirect] = useState(false);
+    const history = useHistory();
     const [campgroundState, setCampgroundState] = useState(null);
     const [isDataLoaded, setLoaded] = useState(false);
-
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [price, setPrice] = useState('');
@@ -66,7 +65,12 @@ export default function EditCampground() {
         }).then((res) => {
             console.log("response", res);
             if (res.ok) {
-                setRedirect(true);
+                history.push({
+                    pathname: res.url,
+                    state: { 
+                        from: 'edit'
+                    }
+                })
             }
             //TODO: Error handling
         })

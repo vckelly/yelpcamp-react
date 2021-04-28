@@ -39,11 +39,13 @@ export default function Campgrounds() {
       //fetchData().then(() => setDataLoaded(true));
       fetchData();
     }  
+    //TODO: check if this is correct way to load data with useEffect
   }, [campgroundState, isDataLoaded]);
 
   useEffect(() => {
     setDataLoaded(false);
-    if (location.state && location.state.from === 'login') {
+    if (location.state) {
+      if (location.state.from === 'login') {
       toast.success('Welcome Back!', {
         position: "top-right",
         autoClose: 1500,
@@ -53,6 +55,18 @@ export default function Campgrounds() {
         draggable: true,
         progress: undefined,
         });
+      }
+      if (location.state.from === 'show') {
+        toast.success('Campground successfully deleted!', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     }
   }, []);
 

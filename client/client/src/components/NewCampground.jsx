@@ -1,35 +1,17 @@
 import { React, useEffect, useState } from 'react'
-import { Redirect, useParams } from "react-router-dom"; 
+import { Redirect, useParams, useHistory } from "react-router-dom"; 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 
 
 export default function NewCampground() {
-
+    const history = useHistory();
     const [redirect, setRedirect] = useState(false);
     const [title, setTitle] = useState('');
     const [location, setLocation] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
-
-    // useEffect(() => {
-    //     async function fetchData () {
-    //     try {
-    //         const response = await fetch(`http://localhost:5000/campgrounds/${id}`);
-    //         const json = await response.json();
-    //         setTitle(json.title);
-    //         setLocation(json.location);
-    //         setPrice(json.price);
-    //         setDescription(json.description);
-    //         setCampgroundState(json);
-    //         setLoaded(true);        
-    //         //console.log(campgroundState);
-    //     } catch (error) {}
-    //     }
-
-    //     fetchData();
-    // }, []);
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(e.nativeEvent.target,
@@ -59,10 +41,14 @@ export default function NewCampground() {
             body: JSON.stringify(data)
 
         }).then((res) => {
-            console.log("response", res);
-            if (res.status === 200) {
-                //TODO: Add success toast and redirect to newly created campground url
-                setRedirect(true);
+            if (res.ok) {
+                const id = res.url.split('/');
+                history.push({
+                    pathname: id[id.length-1],
+                    state: { 
+                        from: 'new'
+                    }
+                })
             }
             //TODO: Error handling
         })

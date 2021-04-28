@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card';
 import Carousel from 'react-bootstrap/Carousel';
@@ -10,15 +10,43 @@ import Spinner from 'react-bootstrap/Spinner';
 import Rating from '@material-ui/lab/Rating';
 import { UserContext } from '../UserContext.js';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function ShowCampground() {
 
   let { id } = useParams();
   const [campgroundState, setCampgroundState] = useState(null);
   const [isDataLoaded, setLoaded] = useState(false);
+  const history = useHistory();
+  const location = useLocation();
 
   const [user, setUser] = useContext(UserContext);
 
   //TODO: Add delete button/functionality
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    fetch(`http://localhost:5000/campgrounds/${id}?_method=DELETE`, {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    }).then((res) => {
+        console.log("response", res);
+        if (res.ok) {
+          history.push({
+              pathname: "/campgrounds",
+              state: { 
+                  from: 'show'
+              }
+          })
+        }
+        //TODO: Error handling
+    })
+  }
 
   useEffect(() => {
     async function fetchData () {
@@ -31,10 +59,37 @@ function ShowCampground() {
     }
     
     fetchData();
+    //TODO: fix Toast appearing on refresh 
+    if (location.state) {
+      if (location.state.from === 'edit') {
+        toast.success('Campground succesfully updated!', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+      }
+      if (location.state.from === 'new') {
+        toast.success('Campground succesfully created!', {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          });
+      }
+      location.state.from = '';
+    }
   }, []);
 
   return (
     <div className="row">
+      <ToastContainer />
       <h1>ShowCampground!</h1>
         { isDataLoaded ? (
           <div className="col-6">
@@ -69,7 +124,10 @@ function ShowCampground() {
                 <ListGroup.Item>{"$" + campgroundState.price + "/night"}</ListGroup.Item>
               </ListGroup>
               { user && user['user'] === campgroundState.author.username ? (
-                <Link to={`/campgrounds/${id}/edit`} className="btn btn-success">Edit Campground</Link>)
+                <>
+                  <Link to={`/campgrounds/${id}/edit`} className="btn btn-success">Edit Campground</Link>
+                  <Button className="btn btn-danger" onClick={handleClick}>Delete</Button>
+                </>)
                 : ('')
               }              
               <div className="col-6 text-muted">
