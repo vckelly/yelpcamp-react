@@ -39,13 +39,13 @@ export default function Login() {
         }).then((res) => {
             //console.log(res);
             if (res.ok) {                   
-                    history.push({
-                        pathname: '/campgrounds',
-                        state: { 
-                            from: 'login'
-                        }
-                    })
-                
+                history.push({
+                    pathname: '/campgrounds',
+                    state: { 
+                        from: 'login'
+                    }
+                })
+            
             }
             else {
                 toast.error('Username or password was incorrect. Try again.', {

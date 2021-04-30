@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useHistory, useLocation } from "react-router-dom"; 
 import Campground from './Campground.jsx';
+import MapboxGLMap from './MapboxGLMap.jsx';
 import { UserContext } from '../UserContext.js';
 import Spinner from 'react-bootstrap/Spinner';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '../Campgrounds.css';
 
 
 export default function Campgrounds() {
@@ -45,8 +47,7 @@ export default function Campgrounds() {
   useEffect(() => {
     setDataLoaded(false);
     if (location.state) {
-      if (location.state.from === 'login') {
-      toast.success('Welcome Back!', {
+      const toastObj = {
         position: "top-right",
         autoClose: 1500,
         hideProgressBar: false,
@@ -54,37 +55,35 @@ export default function Campgrounds() {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        });
+        };
+      if (location.state.from === 'login') {
+        toast.success('Welcome Back!', toastObj);
       }
       if (location.state.from === 'show') {
-        toast.success('Campground successfully deleted!', {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success('Campground successfully deleted!', toastObj);
       }
     }
   }, []);
 
   return (
-    <div className="Campgrounds">
-      <ToastContainer />
-      <h1>Campgrounds!</h1>
-      { isDataLoaded ? (
-        <>
-        { campgroundState.map((camp) => (
-          <Campground
-            key={camp.id}
-            campground={camp}
-          />))}
-        </>
-        ) : (<Spinner animation="border" role="status"/>)
-      }
-    </div>
+    <>
+      <div className="Campgrounds">
+        <ToastContainer />
+        <h1>Campgrounds!</h1>
+        
+        { isDataLoaded ? (
+          <>
+            <MapboxGLMap campgrounds={campgroundState} />
+            { campgroundState.map((camp) => (
+              <Campground
+                key={camp.id}
+                campground={camp}
+              />))}
+          </>
+          ) : (<Spinner animation="border" role="status"/>)
+        }
+      </div>
+    </>
   );
 }
 
