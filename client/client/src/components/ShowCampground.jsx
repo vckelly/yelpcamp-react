@@ -9,6 +9,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
 import Rating from '@material-ui/lab/Rating';
 import { UserContext } from '../UserContext.js';
+import ShowCampgroundMap from './ShowCampgroundMap.jsx';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -90,51 +91,53 @@ function ShowCampground() {
   return (
     <div className="row">
       <ToastContainer />
-      <h1>ShowCampground!</h1>
         { isDataLoaded ? (
-          <div className="col-6">
-            { campgroundState.images.length > 0 ?
-              (
-                <Carousel>
-                { campgroundState.images.map((img) => {
-                    return (
-                    <Carousel.Item key={img.id}>
-                      <img          
-                        key={img.id}              
-                        className="d-block w-100"
-                        src={img.url}
-                        alt='Slide Here'
-                      />
-                    </Carousel.Item>
-                    )
-                  }
-                )}                
-                </Carousel>
-              ) 
-              : ('')
-            }
-            <Card className="mb-3">
-              <Card.Body>
-                <Card.Title>{campgroundState.title}</Card.Title>  
-                <Card.Text>{campgroundState.description}</Card.Text>
-              </Card.Body>
-              <ListGroup variant="flush">
-                <ListGroup.Item className="text-muted">{campgroundState.location}</ListGroup.Item>
-                <ListGroup.Item>{"Submitted by " + campgroundState.author.username}</ListGroup.Item>
-                <ListGroup.Item>{"$" + campgroundState.price + "/night"}</ListGroup.Item>
-              </ListGroup>
-              { user && user['user'] === campgroundState.author.username ? (
-                <>
-                  <Link to={`/campgrounds/${id}/edit`} className="btn btn-success">Edit Campground</Link>
-                  <Button className="btn btn-danger" onClick={handleClick}>Delete</Button>
-                </>)
+          <>
+            <ShowCampgroundMap campground={campgroundState} />
+            <div className="col-6">
+              { campgroundState.images.length > 0 ?
+                (
+                  <Carousel>
+                  { campgroundState.images.map((img) => {
+                      return (
+                      <Carousel.Item key={img.id}>
+                        <img          
+                          key={img.id}              
+                          className="d-block w-100"
+                          src={img.url}
+                          alt='Slide Here'
+                        />
+                      </Carousel.Item>
+                      )
+                    }
+                  )}                
+                  </Carousel>
+                ) 
                 : ('')
-              }              
-              <div className="col-6 text-muted">
-                2 days ago
-              </div>
-            </Card>
-          </div>) : (<Spinner animation="border" />)
+              }
+              <Card className="mb-3">
+                <Card.Body>
+                  <Card.Title>{campgroundState.title}</Card.Title>  
+                  <Card.Text>{campgroundState.description}</Card.Text>
+                </Card.Body>
+                <ListGroup variant="flush">
+                  <ListGroup.Item className="text-muted">{campgroundState.location}</ListGroup.Item>
+                  <ListGroup.Item>{"Submitted by " + campgroundState.author.username}</ListGroup.Item>
+                  <ListGroup.Item>{"$" + campgroundState.price + "/night"}</ListGroup.Item>
+                </ListGroup>
+                { user && user['user'] === campgroundState.author.username ? (
+                  <>
+                    <Link to={`/campgrounds/${id}/edit`} className="btn btn-success">Edit Campground</Link>
+                    <Button className="btn btn-danger" onClick={handleClick}>Delete</Button>
+                  </>)
+                  : ('')
+                }              
+                <div className="col-6 text-muted">
+                  2 days ago
+                </div>
+              </Card>
+            </div>
+          </>) : (<Spinner animation="border" />)
         }
         <div className="col-6">
         { user ? (

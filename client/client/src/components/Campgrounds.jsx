@@ -68,9 +68,7 @@ export default function Campgrounds() {
   return (
     <>
       <div className="Campgrounds">
-        <ToastContainer />
-        <h1>Campgrounds!</h1>
-        
+        <ToastContainer />        
         { isDataLoaded ? (
           <>
             <MapboxGLMap campgrounds={campgroundState} />
