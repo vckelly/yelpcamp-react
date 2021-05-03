@@ -13,11 +13,7 @@ import './App.css';
 import { Route, Router, Switch } from "react-router-dom";
 
 function App() {
-
-  //const user = useContext(UserContext);
   const contextHook = useState(useContext(UserContext));
-
-  //console.log("From app", user, setUser)
 
   useEffect(() => {
     fetch('http://localhost:5000/users/logged_in', {

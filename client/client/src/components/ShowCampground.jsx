@@ -7,9 +7,11 @@ import Form from 'react-bootstrap/Form';
 import { Link } from "react-router-dom";
 import ListGroup from 'react-bootstrap/ListGroup';
 import Spinner from 'react-bootstrap/Spinner';
-import Rating from '@material-ui/lab/Rating';
+import Rate from 'rc-rate';
+import 'rc-rate/assets/index.css';
 import { UserContext } from '../UserContext.js';
 import ShowCampgroundMap from './ShowCampgroundMap.jsx';
+import Review from './Review.jsx';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,6 +21,8 @@ function ShowCampground() {
   let { id } = useParams();
   const [campgroundState, setCampgroundState] = useState(null);
   const [isDataLoaded, setLoaded] = useState(false);
+  const [ratingStars, setRatingStars] = useState(0);
+  const [ratingText, setRatingText] = useState('');
   const history = useHistory();
   const location = useLocation();
 
@@ -26,7 +30,7 @@ function ShowCampground() {
 
   //TODO: Add delete button/functionality
 
-  const handleClick = (e) => {
+  const handleDelete = (e) => {
     e.preventDefault();
     fetch(`http://localhost:5000/campgrounds/${id}?_method=DELETE`, {
         credentials: 'include',
@@ -40,6 +44,37 @@ function ShowCampground() {
         if (res.ok) {
           history.push({
               pathname: "/campgrounds",
+              state: { 
+                  from: 'show'
+              }
+          })
+        }
+        //TODO: Error handling
+    })
+  }
+
+  const handleReview = (e) => {
+    e.preventDefault();
+
+    const review = {
+      rating: parseInt(ratingStars),
+      body: ratingText,
+    };
+
+    console.log(review);
+    fetch(`http://localhost:5000/campgrounds/${id}/reviews`, {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(review)
+    }).then((res) => {
+        console.log("response", res);
+        if (res.ok) {
+          history.push({
+              pathname: `/campgrounds/${id}`,
               state: { 
                   from: 'show'
               }
@@ -88,6 +123,8 @@ function ShowCampground() {
     }
   }, []);
 
+  const handleRatingTextChange = (e) => { setRatingText(e.target.value) };
+
   return (
     <div className="row">
       <ToastContainer />
@@ -125,35 +162,42 @@ function ShowCampground() {
                   <ListGroup.Item>{"Submitted by " + campgroundState.author.username}</ListGroup.Item>
                   <ListGroup.Item>{"$" + campgroundState.price + "/night"}</ListGroup.Item>
                 </ListGroup>
-                { user && user['user'] === campgroundState.author.username ? (
+                { user?.user === campgroundState.author.username ? (
                   <>
                     <Link to={`/campgrounds/${id}/edit`} className="btn btn-success">Edit Campground</Link>
-                    <Button className="btn btn-danger" onClick={handleClick}>Delete</Button>
-                  </>)
-                  : ('')
+                    <Button className="btn btn-danger" onClick={handleDelete}>Delete</Button>
+                  </>) : ('')
                 }              
                 <div className="col-6 text-muted">
                   2 days ago
                 </div>
               </Card>
             </div>
+            <div className="col-6">
+              { user ? (
+                <>
+                  <h2>Leave a Review</h2>
+                  <Form onSubmit={handleReview}>
+                    <Rate allowClear="true" defaultValue="0" value={ratingStars} onChange={setRatingStars}/>
+                    <div className="mb-3">
+                      <label className="form-label" >Review Text</label>
+                      <textarea className="form-control" value={ratingText} onChange={handleRatingTextChange} cols="30" rows="3"></textarea>
+                    </div>
+                    <Button className="btn btn-success" type="submit">Submit</Button>
+                  </Form>
+                </>
+              ) : ('')}
+            </div>
+            { campgroundState.reviews.map((review) => {
+              <Review 
+                key={review._id}  
+                review={review}
+              />
+            })}
           </>) : (<Spinner animation="border" />)
         }
-        <div className="col-6">
-        { user ? (
-          <>
-            <h2>Leave a Review</h2>
-            <Form>
-              <Form.Group controlId="ratingStars">
-                <Rating name="pristine" />
-              </Form.Group>
-            </Form>
-          </>
-        ) : ('')}
-        </div>
-      </div>
+    </div>
   )
 }
 
 export default ShowCampground;
-

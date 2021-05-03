@@ -64,7 +64,7 @@ export default function Register() {
     const handlePasswordChange = (e) => { setPassword(e.target.value) };
 
     return (
-        <div>
+        <>
         { redirect ? (
             <Redirect 
                 to={{ pathname: "/campgrounds"}}
@@ -113,6 +113,6 @@ export default function Register() {
                 </div>
             </Container>
             )}
-        </div>
+        </>
     )
 };
