@@ -1,28 +1,27 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card';
-import Carousel from 'react-bootstrap/Carousel';
-import Form from 'react-bootstrap/Form';
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Carousel from "react-bootstrap/Carousel";
+import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
-import ListGroup from 'react-bootstrap/ListGroup';
-import Spinner from 'react-bootstrap/Spinner';
-import Rate from 'rc-rate';
-import 'rc-rate/assets/index.css';
-import { UserContext } from '../UserContext.js';
-import ShowCampgroundMap from './ShowCampgroundMap.jsx';
-import Review from './Review.jsx';
+import ListGroup from "react-bootstrap/ListGroup";
+import Spinner from "react-bootstrap/Spinner";
+import Rate from "rc-rate";
+import "rc-rate/assets/index.css";
+import { UserContext } from "../UserContext.js";
+import ShowCampgroundMap from "./ShowCampgroundMap.jsx";
+import Review from "./Review.jsx";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ShowCampground() {
-
   let { id } = useParams();
   const [campgroundState, setCampgroundState] = useState(null);
   const [isDataLoaded, setLoaded] = useState(false);
   const [ratingStars, setRatingStars] = useState(0);
-  const [ratingText, setRatingText] = useState('');
+  const [ratingText, setRatingText] = useState("");
   const history = useHistory();
   const location = useLocation();
 
@@ -33,25 +32,25 @@ function ShowCampground() {
   const handleDelete = (e) => {
     e.preventDefault();
     fetch(`http://localhost:5000/campgrounds/${id}?_method=DELETE`, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
     }).then((res) => {
-        console.log("response", res);
-        if (res.ok) {
-          history.push({
-              pathname: "/campgrounds",
-              state: { 
-                  from: 'show'
-              }
-          })
-        }
-        //TODO: Error handling
-    })
-  }
+      console.log("response", res);
+      if (res.ok) {
+        history.push({
+          pathname: "/campgrounds",
+          state: {
+            from: "show",
+          },
+        });
+      }
+      //TODO: Error handling
+    });
+  };
 
   const handleReview = (e) => {
     e.preventDefault();
@@ -61,44 +60,44 @@ function ShowCampground() {
       body: ratingText,
     };
 
-    console.log(review);
     fetch(`http://localhost:5000/campgrounds/${id}/reviews`, {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify(review)
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(review),
     }).then((res) => {
-        console.log("response", res);
-        if (res.ok) {
-          history.push({
-              pathname: `/campgrounds/${id}`,
-              state: { 
-                  from: 'show'
-              }
-          })
-        }
-        //TODO: Error handling
-    })
-  }
+      console.log("response", res);
+      if (res.ok) {
+        history.push({
+          pathname: `/campgrounds/${id}`,
+          state: {
+            from: "add-review",
+          },
+        });
+      }
+      //TODO: Error handling
+    });
+  };
 
   useEffect(() => {
-    async function fetchData () {
+    async function fetchData() {
       try {
         const response = await fetch(`http://localhost:5000/campgrounds/${id}`);
         const json = await response.json();
         setCampgroundState(json);
-        setLoaded(true);        
+        console.log("CAMPGROUND STATE?", campgroundState);
+        setLoaded(true);
       } catch (error) {}
     }
-    
+
     fetchData();
-    //TODO: fix Toast appearing on refresh 
+    //TODO: fix Toast appearing on refresh
     if (location.state) {
-      if (location.state.from === 'edit') {
-        toast.success('Campground succesfully updated!', {
+      if (location.state.from === "edit") {
+        toast.success("Campground succesfully updated!", {
           position: "top-right",
           autoClose: 1500,
           hideProgressBar: false,
@@ -106,10 +105,10 @@ function ShowCampground() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });
+        });
       }
-      if (location.state.from === 'new') {
-        toast.success('Campground succesfully created!', {
+      if (location.state.from === "new") {
+        toast.success("Campground succesfully created!", {
           position: "top-right",
           autoClose: 1500,
           hideProgressBar: false,
@@ -117,87 +116,143 @@ function ShowCampground() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          });
+        });
       }
-      location.state.from = '';
+
+      if (location.state.from === "add-review") {
+        toast.success("Review succesfully created!", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+
+      if (location.state.from === "delete-review") {
+        toast.success("Review succesfully deleted!", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      location.state.from = "";
     }
   }, []);
 
-  const handleRatingTextChange = (e) => { setRatingText(e.target.value) };
+  const handleRatingTextChange = (e) => {
+    setRatingText(e.target.value);
+  };
 
   return (
-    <div className="row">
-      <ToastContainer />
-        { isDataLoaded ? (
+    <div className="ShowCampground">
+      <div className="row">
+        <ToastContainer />
+        {isDataLoaded ? (
           <>
             <ShowCampgroundMap campground={campgroundState} />
             <div className="col-6">
-              { campgroundState.images.length > 0 ?
-                (
-                  <Carousel>
-                  { campgroundState.images.map((img) => {
-                      return (
+              {campgroundState.images.length > 0 ? (
+                <Carousel>
+                  {campgroundState.images.map((img) => {
+                    return (
                       <Carousel.Item key={img.id}>
-                        <img          
-                          key={img.id}              
+                        <img
+                          key={img.id}
                           className="d-block w-100"
                           src={img.url}
-                          alt='Slide Here'
+                          alt="Slide Here"
                         />
                       </Carousel.Item>
-                      )
-                    }
-                  )}                
-                  </Carousel>
-                ) 
-                : ('')
-              }
+                    );
+                  })}
+                </Carousel>
+              ) : (
+                ""
+              )}
               <Card className="mb-3">
                 <Card.Body>
-                  <Card.Title>{campgroundState.title}</Card.Title>  
+                  <Card.Title>{campgroundState.title}</Card.Title>
                   <Card.Text>{campgroundState.description}</Card.Text>
                 </Card.Body>
                 <ListGroup variant="flush">
-                  <ListGroup.Item className="text-muted">{campgroundState.location}</ListGroup.Item>
-                  <ListGroup.Item>{"Submitted by " + campgroundState.author.username}</ListGroup.Item>
-                  <ListGroup.Item>{"$" + campgroundState.price + "/night"}</ListGroup.Item>
+                  <ListGroup.Item className="text-muted">
+                    {campgroundState.location}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    {"Submitted by " + campgroundState.author.username}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    {"$" + campgroundState.price + "/night"}
+                  </ListGroup.Item>
                 </ListGroup>
-                { user?.user === campgroundState.author.username ? (
+                {user?.user === campgroundState.author.username ? (
                   <>
-                    <Link to={`/campgrounds/${id}/edit`} className="btn btn-success">Edit Campground</Link>
-                    <Button className="btn btn-danger" onClick={handleDelete}>Delete</Button>
-                  </>) : ('')
-                }              
-                <div className="col-6 text-muted">
-                  2 days ago
-                </div>
+                    <Link
+                      to={`/campgrounds/${id}/edit`}
+                      className="btn btn-success"
+                    >
+                      Edit Campground
+                    </Link>
+                    <Button className="btn btn-danger" onClick={handleDelete}>
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  ""
+                )}
+                <div className="col-6 text-muted">2 days ago</div>
               </Card>
             </div>
             <div className="col-6">
-              { user ? (
+              {user ? (
                 <>
                   <h2>Leave a Review</h2>
                   <Form onSubmit={handleReview}>
-                    <Rate allowClear="true" defaultValue="0" value={ratingStars} onChange={setRatingStars}/>
+                    <Rate
+                      allowClear="true"
+                      defaultValue="0"
+                      value={ratingStars}
+                      onChange={setRatingStars}
+                    />
                     <div className="mb-3">
-                      <label className="form-label" >Review Text</label>
-                      <textarea className="form-control" value={ratingText} onChange={handleRatingTextChange} cols="30" rows="3"></textarea>
+                      <label className="form-label">Review Text</label>
+                      <textarea
+                        className="form-control"
+                        value={ratingText}
+                        onChange={handleRatingTextChange}
+                        cols="30"
+                        rows="3"
+                      ></textarea>
                     </div>
-                    <Button className="btn btn-success" type="submit">Submit</Button>
+                    <Button className="btn btn-success" type="submit">
+                      Submit
+                    </Button>
                   </Form>
                 </>
-              ) : ('')}
+              ) : (
+                ""
+              )}
+              {campgroundState.reviews.map((review) => {
+                return <Review key={review._id}
+                               review={review} 
+                               campgroundId={id} 
+                        />
+              })}
             </div>
-            { campgroundState.reviews.map((review) => {
-              <Review 
-                key={review._id}  
-                review={review}
-              />
-            })}
-          </>) : (<Spinner animation="border" />)
-        }
+          </>
+        ) : (
+          <Spinner animation="border" />
+        )}
+      </div>
     </div>
-  )
+  );
 }
 
 export default ShowCampground;
