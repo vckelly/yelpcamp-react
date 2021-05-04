@@ -19,6 +19,9 @@ export default function Login() {
     let [userName, setUserName] = useState('');
     let [pw, setPw] = useState('');
 
+    console.log("History", history);
+    console.log("Location", location);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = {
@@ -38,16 +41,23 @@ export default function Login() {
             body: JSON.stringify(data)
         }).then((res) => {
             //console.log(res);
-            if (res.ok) {                   
-                history.push({
-                    pathname: '/campgrounds',
-                    state: { 
-                        from: 'login'
-                    }
-                })
             
+            if (res.ok) {      
+                location.state = { from: "login" }   
+                // toast.success('Welcome back!.', {
+                //     position: "top-right",
+                //     autoClose: 1500,
+                //     hideProgressBar: false,
+                //     closeOnClick: true,
+                //     pauseOnHover: true,
+                //     draggable: true,
+                //     progress: undefined,
+                // });         
+                history.goBack();            
             }
             else {
+                setUserName('');
+                setPw('');
                 toast.error('Username or password was incorrect. Try again.', {
                     position: "top-right",
                     autoClose: 2500,

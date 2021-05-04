@@ -31,7 +31,6 @@ export default function NewCampground() {
         };
 
         fetch(`http://localhost:5000/campgrounds/`, {
-            //fetch(('http://localhost:5000/campgrounds/' + id + '?_method=PUT'), {
             credentials: 'include',
             method: 'POST',
             headers: {

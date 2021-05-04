@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function Review(props) {
   const [user, setUser] = useContext(UserContext);
+  const location = useLocation();
   const history = useHistory();
   const { review, campgroundId } = props;
 
@@ -31,12 +32,8 @@ export default function Review(props) {
     ).then((res) => {
       console.log("response", res);
       if (res.ok) {
-        history.push({
-          pathname: `/campgrounds/${campgroundId}`,
-          state: {
-            from: "delete-review",
-          },
-        });
+        location.state = { from: "delete-review" };
+        history.go(0);
       }
       //TODO: Error handling
     });
@@ -47,7 +44,7 @@ export default function Review(props) {
       <Card className="mb-3">
         <Card.Body>
           <h5 className="card-title">{review.author.username}</h5>
-          <p>Rated: {review.rating} stars</p>
+          <Rate value={review.rating} />
           <p className="card-text">Review: {review.body}</p>
           { user?.user === review.author.username ? (
             <Button className="btn-sm btn-danger" onClick={handleClick}>

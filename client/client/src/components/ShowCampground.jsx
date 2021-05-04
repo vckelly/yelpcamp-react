@@ -25,6 +25,8 @@ function ShowCampground() {
   const history = useHistory();
   const location = useLocation();
 
+  if (location) { console.log("LOCATION", location.state) };
+  if (history) { console.log("history", history) };
   const [user, setUser] = useContext(UserContext);
 
   //TODO: Add delete button/functionality
@@ -71,12 +73,10 @@ function ShowCampground() {
     }).then((res) => {
       console.log("response", res);
       if (res.ok) {
-        history.push({
-          pathname: `/campgrounds/${id}`,
-          state: {
-            from: "add-review",
-          },
-        });
+        setRatingStars(0);
+        setRatingText('');
+        location.state = { from: "add-review" };
+        history.go()
       }
       //TODO: Error handling
     });
@@ -94,57 +94,41 @@ function ShowCampground() {
     }
 
     fetchData();
+    
+  }, []);
+
+  useEffect(() => {
     //TODO: fix Toast appearing on refresh
     if (location.state) {
+      const toastObj = {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        };
+
+      if (location.state.from === "login") {
+          toast.success("Welcmoe back!", toastObj) 
+      }
       if (location.state.from === "edit") {
-        toast.success("Campground succesfully updated!", {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success("Campground succesfully updated!", toastObj) 
       }
       if (location.state.from === "new") {
-        toast.success("Campground succesfully created!", {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success("Campground succesfully created!", toastObj) 
       }
 
       if (location.state.from === "add-review") {
-        toast.success("Review succesfully created!", {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success("Review succesfully created!", toastObj) 
       }
 
       if (location.state.from === "delete-review") {
-        toast.success("Review succesfully deleted!", {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success("Review succesfully deleted!", toastObj) 
       }
-      location.state.from = "";
     }
-  }, []);
+  }, [])
 
   const handleRatingTextChange = (e) => {
     setRatingText(e.target.value);
@@ -201,7 +185,7 @@ function ShowCampground() {
                       Edit Campground
                     </Link>
                     <Button className="btn btn-danger" onClick={handleDelete}>
-                      Delete
+                      Delete Campground
                     </Button>
                   </>
                 ) : (
