@@ -27,7 +27,7 @@ module.exports.register = async (req, res, next) => {
 
 
 module.exports.login = async (req, res) => {
-  //console.log('login', req.body, req.session);
+  console.log('login', req.body, req.session);
   const redirectUrl = req.session.returnTo || '/campgrounds';
   delete req.session.returnTo;
   res.redirect(redirectUrl);

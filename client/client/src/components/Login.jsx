@@ -40,20 +40,15 @@ export default function Login() {
             },
             body: JSON.stringify(data)
         }).then((res) => {
-            //console.log(res);
+            console.log(res);
             
-            if (res.ok) {      
-                location.state = { from: "login" }   
-                // toast.success('Welcome back!.', {
-                //     position: "top-right",
-                //     autoClose: 1500,
-                //     hideProgressBar: false,
-                //     closeOnClick: true,
-                //     pauseOnHover: true,
-                //     draggable: true,
-                //     progress: undefined,
-                // });         
-                history.goBack();            
+            if (res.ok) {          
+                history.push({
+                    pathname: `/campgrounds/`,
+                    state: {
+                      from: "login",
+                    },
+                });            
             }
             else {
                 setUserName('');

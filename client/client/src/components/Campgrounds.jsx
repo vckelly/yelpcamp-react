@@ -62,6 +62,7 @@ export default function Campgrounds() {
       if (location.state.from === 'show') {
         toast.success('Campground successfully deleted!', toastObj);
       }
+      location.state = {};
     }
   }, []);
 

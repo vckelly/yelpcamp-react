@@ -15,7 +15,7 @@ export default function Review(props) {
   const [user, setUser] = useContext(UserContext);
   const location = useLocation();
   const history = useHistory();
-  const { review, campgroundId } = props;
+  const { review, campgroundId, handleReviewDelete, setToastState } = props;
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -31,12 +31,12 @@ export default function Review(props) {
       }
     ).then((res) => {
       console.log("response", res);
+      //this is a hacky workaround :(
       if (res.ok) {
-        location.state = { from: "delete-review" };
-        history.go(0);
+        setToastState('delete-review')
       }
       //TODO: Error handling
-    });
+    })
   };
 
   return (
@@ -44,7 +44,7 @@ export default function Review(props) {
       <Card className="mb-3">
         <Card.Body>
           <h5 className="card-title">{review.author.username}</h5>
-          <Rate value={review.rating} />
+          <Rate value={review.rating} disabled="true"/>
           <p className="card-text">Review: {review.body}</p>
           { user?.user === review.author.username ? (
             <Button className="btn-sm btn-danger" onClick={handleClick}>
