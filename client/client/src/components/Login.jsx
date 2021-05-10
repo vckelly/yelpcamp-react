@@ -19,9 +19,6 @@ export default function Login() {
     let [userName, setUserName] = useState('');
     let [pw, setPw] = useState('');
 
-    console.log("History", history);
-    console.log("Location", location);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = {

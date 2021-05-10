@@ -42,7 +42,7 @@ function ShowCampground() {
         Accept: "application/json",
       },
     }).then((res) => {
-      console.log("response", res);
+      
       if (res.ok) {
         history.push({
           pathname: "/campgrounds",
@@ -72,7 +72,7 @@ function ShowCampground() {
       },
       body: JSON.stringify(review),
     }).then((res) => {
-      console.log("response", res);
+      
       if (res.ok) {
         setRatingStars(0);
         setRatingText('');
@@ -91,7 +91,6 @@ function ShowCampground() {
         setLoaded(true);
       } catch (error) {}
     }
-    console.log("FROM SHOWCAMPGROUND", location);
     fetchData();
     
   }, [location.key, toastState]);
@@ -128,6 +127,7 @@ function ShowCampground() {
       if (location.state.from === "new") {
         toast.success("Campground succesfully created!", toastObj) 
       }
+      location.state = {};
 
     }
   }, [toastState, location.state])

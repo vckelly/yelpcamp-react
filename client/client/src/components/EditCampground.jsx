@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react'
+import { React, useEffect, useState, useRef } from 'react'
 import { useParams, useHistory } from "react-router-dom"; 
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
@@ -15,6 +15,9 @@ export default function EditCampground() {
     const [location, setLocation] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
+    const [files, setFiles] = useState(null);
+
+    const fileInput = useRef(null);
 
     useEffect(() => {
         async function fetchData () {
@@ -36,20 +39,30 @@ export default function EditCampground() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(title, location, price, description, files.target?.files[0], fileInput?.current.files);
         // console.log(e.nativeEvent.target,
         //             e.nativeEvent.target[0].value,
         //             e.nativeEvent.target[1].value,
         //             e.nativeEvent.target[2].value,
         //             e.nativeEvent.target[3].value,
         //             e.nativeEvent.target[4].value)
+
+        var fileObj  = {
+            'lastModified'     : files.target.files[0].lastModified,
+            'lastModifiedDate' : files.target.files[0].lastModifiedDate,
+            'name'             : files.target.files[0].name,
+            'size'             : files.target.files[0].size,
+            'type'             : files.target.files[0].type
+         }; 
+
         const data = {
             campground: {
-                title: e.nativeEvent.target[0].value,
-                location: e.nativeEvent.target[1].value,
-                price: e.nativeEvent.target[2].value,
-                description: e.nativeEvent.target[3].value
+                title: title,
+                location: location,
+                price: price,
+                description: description
             },
-            files: {}
+            files: [fileObj]
         };
         console.log(data);
         fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {
@@ -65,8 +78,9 @@ export default function EditCampground() {
         }).then((res) => {
             console.log("response", res);
             if (res.ok) {
+                const id = res.url.split('/');
                 history.push({
-                    pathname: res.url,
+                    pathname: '/campgrounds/' + id[id.length-1],
                     state: { 
                         from: 'edit'
                     }
@@ -127,7 +141,13 @@ export default function EditCampground() {
                         <div className="mb-3">
                             <Form.Group controlId="imageFiles" >
                                 <span className="form-file-text custom-file-label">Add more image(s)...</span>                   
-                                <Form.File id="imageFile" multiple/>   
+                                <Form.File id="imageFile"
+                                           type="file"
+                                           ref={fileInput}
+                                           onChange={setFiles}
+                                           multiple
+                                           custom
+                                />   
                             </Form.Group>
                         </div>
                         <Button variant="info" type="submit">Update Campground</Button>{' '}

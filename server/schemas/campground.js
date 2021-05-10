@@ -30,5 +30,5 @@ module.exports.campgroundSchema = Joi.object({
         description: Joi.string().required().escapeHTML()
     }).required(),
     deleteImages: Joi.array(),
-    files: Joi.object()
+    files: Joi.array()
 });
