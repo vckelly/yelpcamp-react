@@ -39,42 +39,25 @@ export default function EditCampground() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(title, location, price, description, files.target?.files[0], fileInput?.current.files);
-        // console.log(e.nativeEvent.target,
-        //             e.nativeEvent.target[0].value,
-        //             e.nativeEvent.target[1].value,
-        //             e.nativeEvent.target[2].value,
-        //             e.nativeEvent.target[3].value,
-        //             e.nativeEvent.target[4].value)
-
-        var fileObj  = {
-            'lastModified'     : files.target.files[0].lastModified,
-            'lastModifiedDate' : files.target.files[0].lastModifiedDate,
-            'name'             : files.target.files[0].name,
-            'size'             : files.target.files[0].size,
-            'type'             : files.target.files[0].type
-         }; 
-
         const data = {
             campground: {
                 title: title,
                 location: location,
                 price: price,
                 description: description
-            },
-            files: [fileObj]
+            }
         };
-        console.log(data);
+
+        console.log(files?.target.files);
+        const formData = new FormData();
+        formData.append('campground', data.campground);
+        formData.append('image', files.target.files[0]);
+
         fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {
             //fetch(('http://localhost:5000/campgrounds/' + id + '?_method=PUT'), {
             credentials: 'include',
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-
+            body: formData
         }).then((res) => {
             console.log("response", res);
             if (res.ok) {
@@ -142,6 +125,7 @@ export default function EditCampground() {
                             <Form.Group controlId="imageFiles" >
                                 <span className="form-file-text custom-file-label">Add more image(s)...</span>                   
                                 <Form.File id="imageFile"
+                                           name="image"
                                            type="file"
                                            ref={fileInput}
                                            onChange={setFiles}
