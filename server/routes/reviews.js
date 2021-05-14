@@ -8,7 +8,7 @@ const Review = require('../models/review');
 const { validateReview, isLoggedIn, isReviewAuthor } = require('../middleware');
 const { reviewSchema } = require('../schemas/review');
 
-router.post("/", isLoggedIn, catchAsync(reviews.createReview));
+router.post("/", isLoggedIn, validateReview, catchAsync(reviews.createReview));
 
 router.delete("/:reviewId", isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview));
 

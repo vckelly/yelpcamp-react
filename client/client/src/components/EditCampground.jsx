@@ -16,6 +16,7 @@ export default function EditCampground() {
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [files, setFiles] = useState(null);
+    const [deleteImages, setDeleteImages] = useState([]);
 
     const fileInput = useRef(null);
 
@@ -48,10 +49,10 @@ export default function EditCampground() {
             }
         };
 
-        console.log(files?.target.files);
         const formData = new FormData();
         formData.append('campground', data.campground);
-        formData.append('image', files.target.files[0]);
+        if (files?.target.files)  { formData.append('image', files.target.files[0]) };
+        if (deleteImages) { formData.append('deleteImages', deleteImages) };
 
         fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {
             //fetch(('http://localhost:5000/campgrounds/' + id + '?_method=PUT'), {
@@ -132,6 +133,24 @@ export default function EditCampground() {
                                            multiple
                                            custom
                                 />   
+                            </Form.Group>
+                            <Form.Group controlId="deleteImages" >
+                                { campgroundState.images.map((img) => {
+                                    return (
+                                        <>
+                                            <img src={img.url} className="img-thumbnail"></img>
+                                            <Form.Check 
+                                            type='checkbox'
+                                            id={img.filename}
+                                            label='Delete?'
+                                            onChange={ e => {
+                                                setDeleteImages(prev => [...prev, e.target.id]);
+                                              }
+                                            }
+                                            />
+                                        </>
+                                    )
+                                })}
                             </Form.Group>
                         </div>
                         <Button variant="info" type="submit">Update Campground</Button>{' '}
