@@ -20,7 +20,7 @@ function ShowCampground() {
   let { id } = useParams();
   const [campgroundState, setCampgroundState] = useState(null);
   const [isDataLoaded, setLoaded] = useState(false);
-  const [ratingStars, setRatingStars] = useState(0);
+  const [ratingStars, setRatingStars] = useState(1);
   const [ratingText, setRatingText] = useState("");
   const [toastState, setToastState] = useState("");
   const history = useHistory();
@@ -42,7 +42,6 @@ function ShowCampground() {
         Accept: "application/json",
       },
     }).then((res) => {
-      
       if (res.ok) {
         history.push({
           pathname: "/campgrounds",
@@ -72,11 +71,10 @@ function ShowCampground() {
       },
       body: JSON.stringify(review),
     }).then((res) => {
-      
       if (res.ok) {
-        setRatingStars(0);
-        setRatingText('');
-        setToastState('add-review');
+        setRatingStars(1);
+        setRatingText("");
+        setToastState("add-review");
       }
       //TODO: Error handling
     });
@@ -92,7 +90,6 @@ function ShowCampground() {
       } catch (error) {}
     }
     fetchData();
-    
   }, [location.key, toastState]);
 
   useEffect(() => {
@@ -109,31 +106,37 @@ function ShowCampground() {
 
     if (toastState === "add-review") {
       toast.success("Review succesfully created!", toastObj);
-      setToastState(''); 
+      setToastState("");
     }
     if (toastState === "delete-review") {
-      toast.success("Review succesfully deleted!", toastObj)
-      setToastState('');
+      toast.success("Review succesfully deleted!", toastObj);
+      setToastState("");
     }
 
     if (location.state) {
-      
       if (location.state.from === "login") {
-          toast.success("Welcmoe back!", toastObj) 
+        toast.success("Welcmoe back!", toastObj);
       }
       if (location.state.from === "edit") {
-        toast.success("Campground succesfully updated!", toastObj) 
+        toast.success("Campground succesfully updated!", toastObj);
       }
       if (location.state.from === "new") {
-        toast.success("Campground succesfully created!", toastObj) 
+        toast.success("Campground succesfully created!", toastObj);
       }
       location.state = {};
-
     }
-  }, [toastState, location.state])
+  }, [toastState, location.state]);
 
   const handleRatingTextChange = (e) => {
     setRatingText(e.target.value);
+  };
+
+  const handleRatingStarChange = (e) => {
+    console.log(e.target);
+    if (e.target.value === 0) {
+      setRatingStars(1)
+    } 
+    else { setRatingStars(e.target.value) };
   };
 
   return (
@@ -203,9 +206,8 @@ function ShowCampground() {
                   <Form onSubmit={handleReview}>
                     <Rate
                       allowClear="true"
-                      defaultValue="0"
                       value={ratingStars}
-                      onChange={setRatingStars}
+                      onChange={handleRatingStarChange}
                     />
                     <div className="mb-3">
                       <label className="form-label">Review Text</label>
@@ -226,11 +228,14 @@ function ShowCampground() {
                 ""
               )}
               {campgroundState.reviews.map((review) => {
-                return <Review key={review._id}
-                               review={review} 
-                               campgroundId={id}
-                               setToastState={setToastState} 
-                        />
+                return (
+                  <Review
+                    key={review._id}
+                    review={review}
+                    campgroundId={id}
+                    setToastState={setToastState}
+                  />
+                );
               })}
             </div>
           </>

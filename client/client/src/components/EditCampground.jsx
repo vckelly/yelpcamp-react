@@ -22,19 +22,18 @@ export default function EditCampground() {
 
     useEffect(() => {
         async function fetchData () {
-        try {
-            const response = await fetch(`http://localhost:5000/campgrounds/${id}`);
-            const json = await response.json();
-            setTitle(json.title);
-            setLocation(json.location);
-            setPrice(json.price);
-            setDescription(json.description);
-            setCampgroundState(json);
-            setLoaded(true);        
-            //console.log(campgroundState);
-        } catch (error) {}
+            try {
+                const response = await fetch(`http://localhost:5000/campgrounds/${id}`);
+                const json = await response.json();
+                setTitle(json.title);
+                setLocation(json.location);
+                setPrice(json.price);
+                setDescription(json.description);
+                setCampgroundState(json);
+                setLoaded(true);        
+                //console.log(campgroundState);
+            } catch (error) {}
         }
-
         fetchData();
     }, []);
 
@@ -53,6 +52,8 @@ export default function EditCampground() {
         formData.append('campground', data.campground);
         if (files?.target.files)  { formData.append('image', files.target.files[0]) };
         if (deleteImages) { formData.append('deleteImages', deleteImages) };
+
+        setLoaded(false);
 
         fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {
             //fetch(('http://localhost:5000/campgrounds/' + id + '?_method=PUT'), {
@@ -157,7 +158,8 @@ export default function EditCampground() {
                     </Form>
                 </div>
             </div>
-            ) : ((<Spinner animation="border" />))}
+            ) : (<Spinner animation="border" />)
+        }
         </div>
     )
 };

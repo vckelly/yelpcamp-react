@@ -29,7 +29,7 @@ export default function Logout() {
             console.log('From logout', res);
             
             if (res.ok) {
-                    setUser(null);
+                    setUser('');
                     history.push({
                         pathname: '/campgrounds',
                         state: { 

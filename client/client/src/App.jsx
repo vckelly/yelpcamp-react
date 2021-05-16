@@ -21,14 +21,15 @@ import {
 
 function App() {
   const contextHook = useState(useContext(UserContext));
-
+  
   useEffect(() => {
+    console.log(contextHook, contextHook[0]);
     fetch("http://localhost:5000/users/logged_in", {
       method: "GET",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        "Accept": "application/json",
         "Access-Control-Allow-Origin": "http://localhost:3000/*",
         "Access-Control-Allow-Credentials": true,
       },
@@ -39,7 +40,7 @@ function App() {
         contextHook[1](user);
       });
     });
-  }, []);
+  }, [contextHook[0].user]);
 
   return (
     <UserContext.Provider value={contextHook}>
