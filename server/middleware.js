@@ -49,6 +49,7 @@ module.exports.validateCampground = (req, res, next) => {
   }
 }
 
+
 module.exports.validateReview = (req, res, next) => {
   const {error} = reviewSchema.validate(req.body);
   console.log("Req body from validate review:", req.body);

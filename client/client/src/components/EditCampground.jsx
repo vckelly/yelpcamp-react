@@ -49,7 +49,8 @@ export default function EditCampground() {
         };
 
         const formData = new FormData();
-        formData.append('campground', data.campground);
+        formData.append('campground', data);
+
         if (files?.target.files)  { formData.append('image', files.target.files[0]) };
         if (deleteImages) { formData.append('deleteImages', deleteImages) };
 

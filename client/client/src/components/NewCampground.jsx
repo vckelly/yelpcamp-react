@@ -1,114 +1,150 @@
 import { React, useEffect, useState } from 'react'
 import { Redirect, useParams, useHistory } from "react-router-dom"; 
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
+// import Button from 'react-bootstrap/Button'
+// import Form from 'react-bootstrap/Form'
 
+
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 export default function NewCampground() {
+
     const history = useHistory();
     const [redirect, setRedirect] = useState(false);
-    const [title, setTitle] = useState('');
-    const [location, setLocation] = useState('');
-    const [price, setPrice] = useState('');
-    const [description, setDescription] = useState('');
+     
+
+    const validationSchema = yup.object({
+        title: yup
+          .string('Enter your title')
+          .required('title is required'),
+        location: yup
+          .string('Enter your location')
+          .min(3, 'Location should be of minimum 3 characters length')
+          .required('location is required'),
+        price: yup
+          .number('Enter your price')
+          .min(1, 'Price should be of minimum of $1')
+          .required('price is required'),
+        description: yup
+          .string('Enter your description')
+          .min(3, 'Description should be of minimum 3 characters length')
+          .required('description is required'),
+    });
+
+    const formik = useFormik({
+        initialValues: {
+          title: '',
+          location: '',
+          price: 1,
+          description: '',
+          image: null
+        },
+        validationSchema: validationSchema,
+        //TODO: Convert to field-data for file upload? 
+        onSubmit: (values) => {
+            const data = {
+                campground: {
+                    title: values.title,
+                    location: values.location,
+                    price: values.price,
+                    description: values.description
+                },
+                files: [values.image ? values.image : '']
+            };
+
+            fetch(`http://localhost:5000/campgrounds/`, {
+                credentials: 'include',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(data)
+
+            }).then((res) => {
+                if (res.ok) {
+                    const id = res.url.split('/');
+                    history.push({
+                        pathname: id[id.length-1],
+                        state: { 
+                            from: 'new'
+                        }
+                    })
+                }
+                else {
+                    //formik.resetForm();
+                }
+                //TODO: Error handling
+            })
+        },
+    });
+
     
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(e.nativeEvent.target,
-                    e.nativeEvent.target[0].value,
-                    e.nativeEvent.target[1].value,
-                    e.nativeEvent.target[2].value,
-                    e.nativeEvent.target[3].value,
-                    e.nativeEvent.target[4].value)
-        const data = {
-            campground: {
-                title: e.nativeEvent.target[0].value,
-                location: e.nativeEvent.target[1].value,
-                price: e.nativeEvent.target[2].value,
-                description: e.nativeEvent.target[3].value
-            },
-            files: {}
-        };
-
-        fetch(`http://localhost:5000/campgrounds/`, {
-            credentials: 'include',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-
-        }).then((res) => {
-            if (res.ok) {
-                const id = res.url.split('/');
-                history.push({
-                    pathname: id[id.length-1],
-                    state: { 
-                        from: 'new'
-                    }
-                })
-            }
-            //TODO: Error handling
-        })
-    };
-
-    const handleTitleChange = (e) => { setTitle(e.target.value) };
-    const handlePriceChange = (e) => { setPrice(e.target.value) };
-    const handleDescriptionChange = (e) => { setDescription(e.target.value) };
-    const handleLocationChange = (e) => { setLocation(e.target.value) };
-
     return (
-        <div className="row">
-            <h1 className="text-center">New Campground</h1>
-            <div className="col-md-6 offset-md-3 ">
-                <Form onSubmit={handleSubmit}>
-                    <div className="mb-3">
-                        <Form.Group controlId="title" >
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control type="text" 
-                                            name="title"  
-                                            value={title} 
-                                            onChange={handleTitleChange}/>
-                        </Form.Group>
-                    </div>
-                    <div className="mb-3">
-                        <Form.Group controlId="location" >
-                            <Form.Label>Location</Form.Label>
-                            <Form.Control type="text" 
-                                            name="location"  
-                                            value={location}
-                                            onChange={handleLocationChange}/>
-                        </Form.Group>
-                    </div>
-                    <div className="mb-3">
-                        <Form.Group controlId="price" >
-                            <Form.Label>Campground Price</Form.Label>
-                            <Form.Control type="number" 
-                                            name="price"  
-                                            value={price} 
-                                            onChange={handlePriceChange}/>
-                        </Form.Group>
-                    </div>
-                    <div className="mb-3">
-                        <Form.Group controlId="description" >
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control type="text" 
-                                            name="description"   
-                                            value={description} 
-                                            onChange={handleDescriptionChange}/>
-                        </Form.Group>
-                    </div>
-                    <div className="mb-3">
-                        <Form.Group controlId="imageFiles" >
-                            <span className="form-file-text custom-file-label">Choose image(s)...</span>                   
-                            <Form.File id="imageFile" multiple/>   
-                        </Form.Group>
-                    </div>
-                    <Button variant="info" type="submit">Add Campground</Button>{' '}
-                </Form>
-                <a href="/campgrounds">All Campgrounds</a> 
-            </div>
-        </div>
-    )
+    <div>
+        <form onSubmit={formik.handleSubmit}>
+        <TextField
+            fullWidth
+            id="title"
+            name="title"
+            label="Title"
+            value={formik.values.title}
+            onChange={formik.handleChange}
+            error={formik.touched.title && Boolean(formik.errors.title)}
+            helperText={formik.touched.title && formik.errors.title}
+        />
+        <TextField
+            fullWidth
+            id="location"
+            name="location"
+            label="Location"
+            value={formik.values.location}
+            onChange={formik.handleChange}
+            error={formik.touched.location && Boolean(formik.errors.location)}
+            helperText={formik.touched.location && formik.errors.location}
+        />
+        <TextField
+            fullWidth
+            id="price"
+            name="price"
+            label="Price"
+            type="number"
+            value={formik.values.price}
+            onChange={formik.handleChange}
+            error={formik.touched.price && Boolean(formik.errors.price)}
+            helperText={formik.touched.price && formik.errors.price}
+        />
+        <TextField
+            fullWidth
+            id="description"
+            name="description"
+            label="Description"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            error={formik.touched.description && Boolean(formik.errors.description)}
+            helperText={formik.touched.description && formik.errors.description}
+        />
+
+        <Button
+          variant="contained"
+          component="label"
+        >
+        Upload Image
+        <input
+          type="file"
+          id="image"
+          value={formik.values.image}
+          onChange={formik.handleChange}
+          hidden
+        />
+        </Button>
+        <Button color="primary" variant="contained" fullWidth type="submit">
+            Add Campground
+        </Button>
+        </form>
+    </div>
+    );
 };
+
