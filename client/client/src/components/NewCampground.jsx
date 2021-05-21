@@ -1,7 +1,7 @@
-import { React, useEffect, useState } from 'react'
+import { React, useEffect, useState, useRef } from 'react';
 import { Redirect, useParams, useHistory } from "react-router-dom"; 
-// import Button from 'react-bootstrap/Button'
-// import Form from 'react-bootstrap/Form'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 import { useFormik } from 'formik';
@@ -13,7 +13,8 @@ export default function NewCampground() {
 
     const history = useHistory();
     const [redirect, setRedirect] = useState(false);
-     
+    const [files, setFiles] = useState([]);
+    const fileInput = useRef(null);
 
     const validationSchema = yup.object({
         title: yup
@@ -38,11 +39,9 @@ export default function NewCampground() {
           title: '',
           location: '',
           price: 1,
-          description: '',
-          image: null
+          description: ''
         },
         validationSchema: validationSchema,
-        //TODO: Convert to field-data for file upload? 
         onSubmit: (values) => {
             const data = {
                 campground: {
@@ -50,18 +49,20 @@ export default function NewCampground() {
                     location: values.location,
                     price: values.price,
                     description: values.description
-                },
-                files: [values.image ? values.image : '']
+                }
             };
+            const formData = new FormData();
+            formData.append('campground', JSON.stringify(data.campground));
+            if (files?.target.files)  { 
+                console.log(files.target.files[0]);
+                formData.append('image', files.target.files[0]) 
+            };
+            
 
             fetch(`http://localhost:5000/campgrounds/`, {
                 credentials: 'include',
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(data)
+                body: formData
 
             }).then((res) => {
                 if (res.ok) {
@@ -74,9 +75,17 @@ export default function NewCampground() {
                     })
                 }
                 else {
-                    //formik.resetForm();
+                    formik.resetForm();
+                    toast.error('Sorry, something is wrong with your campground. Try again.', {
+                        position: "top-right",
+                        autoClose: 2500,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
                 }
-                //TODO: Error handling
             })
         },
     });
@@ -84,14 +93,15 @@ export default function NewCampground() {
     
     return (
     <div>
+        <ToastContainer />
         <form onSubmit={formik.handleSubmit}>
         <TextField
             fullWidth
             id="title"
             name="title"
             label="Title"
-            value={formik.values.title}
             onChange={formik.handleChange}
+            value={formik.values.title}
             error={formik.touched.title && Boolean(formik.errors.title)}
             helperText={formik.touched.title && formik.errors.title}
         />
@@ -100,8 +110,8 @@ export default function NewCampground() {
             id="location"
             name="location"
             label="Location"
-            value={formik.values.location}
             onChange={formik.handleChange}
+            value={formik.values.location}
             error={formik.touched.location && Boolean(formik.errors.location)}
             helperText={formik.touched.location && formik.errors.location}
         />
@@ -111,8 +121,8 @@ export default function NewCampground() {
             name="price"
             label="Price"
             type="number"
-            value={formik.values.price}
             onChange={formik.handleChange}
+            value={formik.values.price}
             error={formik.touched.price && Boolean(formik.errors.price)}
             helperText={formik.touched.price && formik.errors.price}
         />
@@ -121,8 +131,8 @@ export default function NewCampground() {
             id="description"
             name="description"
             label="Description"
-            value={formik.values.description}
             onChange={formik.handleChange}
+            value={formik.values.description}
             error={formik.touched.description && Boolean(formik.errors.description)}
             helperText={formik.touched.description && formik.errors.description}
         />
@@ -135,8 +145,8 @@ export default function NewCampground() {
         <input
           type="file"
           id="image"
-          value={formik.values.image}
-          onChange={formik.handleChange}
+          ref={fileInput}
+          onChange={setFiles}
           hidden
         />
         </Button>

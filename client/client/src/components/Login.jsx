@@ -27,8 +27,8 @@ export default function Login() {
 
     const formik = useFormik({
         initialValues: {
-          username: 'foobob',
-          password: 'foobar',
+          username: 'con',
+          password: 'con',
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {

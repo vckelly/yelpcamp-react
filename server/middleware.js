@@ -39,7 +39,7 @@ module.exports.isReviewAuthor = async(req, res, next) => {
 
 module.exports.validateCampground = (req, res, next) => {
   const { error } = campgroundSchema.validate(req.body);
-  console.log(req.body);
+  console.log("FROM VALIDATE CAMPGROUND", req.body);
   if (error) {
     const msg = error.details.map(el => el.message).join(',');
     console.log("Middleware: " + msg);

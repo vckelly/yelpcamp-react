@@ -16,13 +16,19 @@ module.exports.renderNewForm = (req, res) => {
 }
 
 module.exports.createCampground = async (req, res, next) => {
+    const parsedBody = JSON.parse(req.body.campground);
     const geoData = await geocoder.forwardGeocode({
-        query: req.body.campground.location,
+        query: parsedBody.location,
         limit: 1
     }).send();
-    const campground = new Campground(req.body.campground);
+    const campground = new Campground(parsedBody);
     campground.geometry = geoData.body.features[0].geometry;
-    if (req.files) { campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }))};
+    if (req.file) {
+        campground.images.push({
+            url: req.file.path,
+            filename: req.file.filename
+        });
+    }
     campground.author = req.user._id;
     await campground.save();
     //console.log(campground);
@@ -56,7 +62,8 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const parsedBody = JSON.parse(req.body.campground);
+    const campground = await Campground.findByIdAndUpdate(id, { ...parsedBody });
     if (req.file) {
         campground.images.push({
             url: req.file.path,

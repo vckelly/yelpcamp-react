@@ -48,8 +48,8 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 // app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize());
@@ -136,8 +136,6 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
-  res.locals.success = req.flash('success');
-  res.locals.error = req.flash('error');
   next();
 });
 
@@ -156,7 +154,7 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
   if (!err.message) { err.message = 'Something went wrong'};
-  res.status(statusCode).render('error', { err });
+  res.status(statusCode).send( { err } );
 });
 
 app.listen(5000, () => {
