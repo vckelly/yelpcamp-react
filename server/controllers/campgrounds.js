@@ -64,6 +64,15 @@ module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
     const parsedBody = JSON.parse(req.body.campground);
     const campground = await Campground.findByIdAndUpdate(id, { ...parsedBody });
+    if (req.body.locationChange) {
+        console.log("inside location change!!!")
+        const geoData = await geocoder.forwardGeocode({
+            query: parsedBody.location,
+            limit: 1
+        }).send();
+        campground.geometry = geoData.body.features[0].geometry;
+    }
+    
     if (req.file) {
         campground.images.push({
             url: req.file.path,

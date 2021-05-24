@@ -86,7 +86,7 @@ export default function EditCampground() {
     
             if (files?.target?.files)  { formData.append('image', files.target.files[0]) };
             if (deleteImages) { formData.append('deleteImages', deleteImages) };
-    
+            if (data.campground.location !== location) { formData.append('locationChange', JSON.stringify(true)) };
             setLoaded(false);
     
             fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {

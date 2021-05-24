@@ -87,10 +87,11 @@ function ShowCampground() {
         const json = await response.json();
         setCampgroundState(json);
         setLoaded(true);
+        console.log(campgroundState);
       } catch (error) {}
     }
     fetchData();
-  }, [location.key, toastState]);
+  }, [location.key, toastState, campgroundState?.location]);
 
   useEffect(() => {
     //TODO: fix Toast appearing on refresh
@@ -129,14 +130,6 @@ function ShowCampground() {
 
   const handleRatingTextChange = (e) => {
     setRatingText(e.target.value);
-  };
-
-  const handleRatingStarChange = (e) => {
-    console.log(e.target);
-    if (e.target.value === 0) {
-      setRatingStars(1)
-    } 
-    else { setRatingStars(e.target.value) };
   };
 
   return (
@@ -207,7 +200,7 @@ function ShowCampground() {
                     <Rate
                       allowClear="true"
                       value={ratingStars}
-                      onChange={handleRatingStarChange}
+                      onChange={setRatingStars}
                     />
                     <div className="mb-3">
                       <label className="form-label">Review Text</label>
@@ -224,9 +217,7 @@ function ShowCampground() {
                     </Button>
                   </Form>
                 </>
-              ) : (
-                ""
-              )}
+              ) : ("")}
               {campgroundState.reviews.map((review) => {
                 return (
                   <Review

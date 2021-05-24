@@ -76,35 +76,43 @@ export default function Login() {
 
     
     return (
-    <div>
-        <ToastContainer />
-        <form onSubmit={formik.handleSubmit}>
-        <TextField
-            fullWidth
-            id="username"
-            name="username"
-            label="Username"
-            value={formik.values.username}
-            onChange={formik.handleChange}
-            error={formik.touched.username && Boolean(formik.errors.username)}
-            helperText={formik.touched.username && formik.errors.username}
-        />
-        <TextField
-            fullWidth
-            id="password"
-            name="password"
-            label="Password"
-            type="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-        />
-        <Button color="primary" variant="contained" fullWidth type="submit">
-            Submit
-        </Button>
-        </form>
-    </div>
+        <div className="container d-flex justify-content-center align-items-center mt-5">
+            <div className="row">
+                <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+                    <div className="card shadow">
+                        <img src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+                            alt="" className="card-img-top" />
+                    </div>
+                    <ToastContainer />
+                    <form onSubmit={formik.handleSubmit}>
+                    <TextField
+                        fullWidth
+                        id="username"
+                        name="username"
+                        label="Username"
+                        value={formik.values.username}
+                        onChange={formik.handleChange}
+                        error={formik.touched.username && Boolean(formik.errors.username)}
+                        helperText={formik.touched.username && formik.errors.username}
+                    />
+                    <TextField
+                        fullWidth
+                        id="password"
+                        name="password"
+                        label="Password"
+                        type="password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        error={formik.touched.password && Boolean(formik.errors.password)}
+                        helperText={formik.touched.password && formik.errors.password}
+                    />
+                    <Button color="primary" variant="contained" fullWidth type="submit">
+                        Submit
+                    </Button>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 };
 

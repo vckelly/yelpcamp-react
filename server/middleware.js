@@ -52,7 +52,6 @@ module.exports.validateCampground = (req, res, next) => {
 
 module.exports.validateReview = (req, res, next) => {
   const {error} = reviewSchema.validate(req.body);
-  console.log("Req body from validate review:", req.body);
   if (error) {
     const msg = error.details.map(el => el.message).join(',');
     console.log("Middleware: " + msg);
