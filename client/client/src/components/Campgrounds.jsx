@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../Campgrounds.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Campgrounds() {
 
@@ -68,7 +69,7 @@ export default function Campgrounds() {
 
   return (
     <>
-      <div className="Campgrounds">
+      <div className="campgrounds">
         <ToastContainer />        
         { isDataLoaded ? (
           <>
@@ -79,7 +80,10 @@ export default function Campgrounds() {
                 campground={camp}
               />))}
           </>
-          ) : (<Spinner animation="border" role="status"/>)
+          ) : ( <span>
+                  <FontAwesomeIcon className="icon" icon="sun" size="7x" spin />
+                </span>                              
+              )
         }
       </div>
     </>

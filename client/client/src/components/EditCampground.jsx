@@ -6,10 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Field, useFormik } from 'formik';
 import * as yup from 'yup';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 export default function EditCampground() {
@@ -86,7 +85,7 @@ export default function EditCampground() {
     
             if (files?.target?.files)  { formData.append('image', files.target.files[0]) };
             if (deleteImages) { formData.append('deleteImages', deleteImages) };
-            if (data.campground.location !== location) { formData.append('locationChange', JSON.stringify(true)) };
+            if (data.campground.location !== location) { formData.append('locationChange', true) };
             setLoaded(false);
     
             fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {
@@ -190,7 +189,9 @@ export default function EditCampground() {
                 Edit Campground
             </Button>
             </form>
-        ) : (<CircularProgress />)
+        ) : (
+              <FontAwesomeIcon className="icon" icon="sun" size="7x" spin />
+            )
     }
     </div>);
 };

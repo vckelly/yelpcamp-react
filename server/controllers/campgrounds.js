@@ -65,7 +65,6 @@ module.exports.updateCampground = async (req, res) => {
     const parsedBody = JSON.parse(req.body.campground);
     const campground = await Campground.findByIdAndUpdate(id, { ...parsedBody });
     if (req.body.locationChange) {
-        console.log("inside location change!!!")
         const geoData = await geocoder.forwardGeocode({
             query: parsedBody.location,
             limit: 1
