@@ -3,7 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import Campground from './Campground.jsx';
 import MapboxGLMap from './MapboxGLMap.jsx';
 import { UserContext } from '../UserContext.js';
-import Spinner from 'react-bootstrap/Spinner';
+import { FixedSizeList as List } from "react-window";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../Campgrounds.css';
@@ -16,9 +16,13 @@ export default function Campgrounds() {
   let location = useLocation();
   let [isDataLoaded, setDataLoaded] = useState('false');
   const [user, setUser] = useContext(UserContext);
+  
   //console.log('From campgrounds', user, setUser);
 
   const [campgroundState, setCampgroundState] = useState([]);
+
+  let campList = [];
+
 
   useEffect(() => {
     async function fetchData () {
@@ -37,12 +41,24 @@ export default function Campgrounds() {
         setCampgroundState(json);
         setDataLoaded(true);
       } catch (error) {}
-    }
+    };
+
     if (campgroundState.length === 0) {
       //fetchData().then(() => setDataLoaded(true));
       fetchData();
     }  
     //TODO: check if this is correct way to load data with useEffect
+    if (isDataLoaded) {
+      campList = campgroundState.map((camp) => (
+        <Campground
+          key={camp.id}
+          campground={camp}
+        />  
+      ));
+
+      console.log(campList);
+      console.log("CAMPGROUND STATE", campgroundState);
+    }
   }, [campgroundState, isDataLoaded]);
 
   useEffect(() => {
@@ -67,6 +83,24 @@ export default function Campgrounds() {
     }
   }, []);
 
+  // const style = {
+  //   position: "absolute",
+  //   left: 0,
+  //   top: 0,
+  //   height: 130, /* itemSize × index */
+  //   width:"100%"
+  // };
+  // {campList[index]}
+  //{campgroundState[index].title}
+  const Row = ({ index, style }) => (
+    <div style={style}>
+      <Campground
+        key={campgroundState[index].id}
+        camp={campgroundState[index]}
+      />
+    </div>
+  );
+
   return (
     <>
       <div className="campgrounds">
@@ -74,11 +108,15 @@ export default function Campgrounds() {
         { isDataLoaded ? (
           <>
             <MapboxGLMap campgrounds={campgroundState} />
-            { campgroundState.map((camp) => (
-              <Campground
-                key={camp.id}
-                campground={camp}
-              />))}
+            <List
+              className="List"
+              height={350}
+              itemCount={campgroundState.length}
+              itemSize={50}
+              width={800}
+            >
+              {Row}
+            </List>
           </>
           ) : ( <span>
                   <FontAwesomeIcon className="icon" icon="sun" size="7x" spin />
@@ -91,3 +129,8 @@ export default function Campgrounds() {
 }
 
 
+// { campgroundState.map((camp) => (
+//   <Campground
+//     key={camp.id}
+//     campground={camp}
+//   />))}
