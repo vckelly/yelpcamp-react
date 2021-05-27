@@ -4,6 +4,7 @@ import Campground from './Campground.jsx';
 import MapboxGLMap from './MapboxGLMap.jsx';
 import { UserContext } from '../UserContext.js';
 import { FixedSizeList as List } from "react-window";
+import AutoSizer from "react-virtualized-auto-sizer";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../Campgrounds.css';
@@ -40,6 +41,13 @@ export default function Campgrounds() {
         const json = await response.json();
         setCampgroundState(json);
         setDataLoaded(true);
+
+        // campList = campgroundState.map((camp) => (
+        //   <Campground
+        //     key={camp.id}
+        //     campground={camp}
+        //   />  
+        // ));
       } catch (error) {}
     };
 
@@ -48,18 +56,25 @@ export default function Campgrounds() {
       fetchData();
     }  
     //TODO: check if this is correct way to load data with useEffect
-    if (isDataLoaded) {
-      campList = campgroundState.map((camp) => (
-        <Campground
-          key={camp.id}
-          campground={camp}
-        />  
-      ));
+    // if (isDataLoaded) {
+    //   campList = campgroundState.map((camp) => (
+    //     <Campground
+    //       key={camp.id}
+    //       campground={camp}
+    //     />  
+    //   ));
 
-      console.log(campList);
-      console.log("CAMPGROUND STATE", campgroundState);
-    }
-  }, [campgroundState, isDataLoaded]);
+    campList = campgroundState.map((camp) => (
+      <Campground
+        key={camp.id}
+        campground={camp}
+      />  
+    ));
+    console.log("CAMPLIST", campList);
+    console.log("CAMPGROUND STATE", campgroundState);
+    
+  // }, [campgroundState, isDataLoaded]);
+  }, [campgroundState]);
 
   useEffect(() => {
     setDataLoaded(false);
@@ -91,15 +106,23 @@ export default function Campgrounds() {
   //   width:"100%"
   // };
   // {campList[index]}
+  // <Campground
+  //     key={campgroundState[index].id}
+  //     camp={campgroundState[index]}
+  // />
   //{campgroundState[index].title}
-  const Row = ({ index, style }) => (
-    <div style={style}>
-      <Campground
-        key={campgroundState[index].id}
-        camp={campgroundState[index]}
-      />
-    </div>
-  );
+  const Row = ({ index, style }) => {
+    // /console.log(data[index]);
+    //console.log(campgroundState[index]);
+    return (
+      <div style={style}>
+        <Campground
+          key={campgroundState[index].id}
+          campground={campgroundState[index]}
+        />
+      </div>
+    )
+  };
 
   return (
     <>
@@ -108,15 +131,19 @@ export default function Campgrounds() {
         { isDataLoaded ? (
           <>
             <MapboxGLMap campgrounds={campgroundState} />
-            <List
-              className="List"
-              height={350}
-              itemCount={campgroundState.length}
-              itemSize={50}
-              width={800}
-            >
-              {Row}
-            </List>
+            <AutoSizer>
+              {({ height, width }) => (
+                <List
+                  className="List"
+                  height={height}
+                  itemCount={campgroundState.length}
+                  itemSize={50}
+                  width={width}
+                >
+                  {Row}
+                </List>
+              )}
+            </AutoSizer>
           </>
           ) : ( <span>
                   <FontAwesomeIcon className="icon" icon="sun" size="7x" spin />
