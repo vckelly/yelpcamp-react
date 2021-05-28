@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, forwardRef } from 'react';
 import { useHistory, useLocation } from "react-router-dom"; 
 import Campground from './Campground.jsx';
 import MapboxGLMap from './MapboxGLMap.jsx';
@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Campgrounds() {
 
+  const GUTTER_SIZE = 25;
   let history = useHistory();
   let location = useLocation();
   let [isDataLoaded, setDataLoaded] = useState('false');
@@ -64,17 +65,17 @@ export default function Campgrounds() {
     //     />  
     //   ));
 
-    campList = campgroundState.map((camp) => (
-      <Campground
-        key={camp.id}
-        campground={camp}
-      />  
-    ));
-    console.log("CAMPLIST", campList);
+    // campList = campgroundState.map((camp) => (
+    //   <Campground
+    //     key={camp.id}
+    //     campground={camp}
+    //   />  
+    // ));
+    //console.log("CAMPLIST", campList);
     console.log("CAMPGROUND STATE", campgroundState);
     
   // }, [campgroundState, isDataLoaded]);
-  }, [campgroundState]);
+  }, [campgroundState, isDataLoaded]);
 
   useEffect(() => {
     setDataLoaded(false);
@@ -98,31 +99,34 @@ export default function Campgrounds() {
     }
   }, []);
 
-  // const style = {
-  //   position: "absolute",
-  //   left: 0,
-  //   top: 0,
-  //   height: 130, /* itemSize × index */
-  //   width:"100%"
-  // };
-  // {campList[index]}
-  // <Campground
-  //     key={campgroundState[index].id}
-  //     camp={campgroundState[index]}
-  // />
   //{campgroundState[index].title}
   const Row = ({ index, style }) => {
     // /console.log(data[index]);
     //console.log(campgroundState[index]);
+
     return (
-      <div style={style}>
+     
+      <div className="virtualized-campground">
         <Campground
           key={campgroundState[index].id}
           campground={campgroundState[index]}
         />
       </div>
+
     )
   };
+
+  const innerElementType = forwardRef(({ style, ...rest }, ref) => (
+    <div
+      ref={ref}
+      style={{
+        ...style,
+        height: `${parseFloat(style.height) + GUTTER_SIZE * 2}px`,
+        padding: '10px'
+      }}
+      {...rest}
+    />
+  ));
 
   return (
     <>
@@ -134,11 +138,12 @@ export default function Campgrounds() {
             <AutoSizer>
               {({ height, width }) => (
                 <List
-                  className="List"
+                  className="list"
                   height={height}
                   itemCount={campgroundState.length}
                   itemSize={50}
                   width={width}
+                  innerElementType={innerElementType}
                 >
                   {Row}
                 </List>
