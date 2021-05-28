@@ -31,7 +31,6 @@ export default function Review(props) {
       }
     ).then((res) => {
       console.log("response", res);
-      //this is a hacky workaround :(
       if (res.ok) {
         setToastState('delete-review')
       }

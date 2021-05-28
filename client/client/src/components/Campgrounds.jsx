@@ -3,7 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import Campground from './Campground.jsx';
 import MapboxGLMap from './MapboxGLMap.jsx';
 import { UserContext } from '../UserContext.js';
-import { FixedSizeList as List } from "react-window";
+import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,8 +12,6 @@ import '../Campgrounds.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Campgrounds() {
-
-  const GUTTER_SIZE = 25;
   let history = useHistory();
   let location = useLocation();
   let [isDataLoaded, setDataLoaded] = useState('false');
@@ -42,40 +40,17 @@ export default function Campgrounds() {
         const json = await response.json();
         setCampgroundState(json);
         setDataLoaded(true);
-
-        // campList = campgroundState.map((camp) => (
-        //   <Campground
-        //     key={camp.id}
-        //     campground={camp}
-        //   />  
-        // ));
       } catch (error) {}
     };
 
     if (campgroundState.length === 0) {
-      //fetchData().then(() => setDataLoaded(true));
+
       fetchData();
     }  
     //TODO: check if this is correct way to load data with useEffect
-    // if (isDataLoaded) {
-    //   campList = campgroundState.map((camp) => (
-    //     <Campground
-    //       key={camp.id}
-    //       campground={camp}
-    //     />  
-    //   ));
-
-    // campList = campgroundState.map((camp) => (
-    //   <Campground
-    //     key={camp.id}
-    //     campground={camp}
-    //   />  
-    // ));
-    //console.log("CAMPLIST", campList);
-    console.log("CAMPGROUND STATE", campgroundState);
     
   // }, [campgroundState, isDataLoaded]);
-  }, [campgroundState, isDataLoaded]);
+  }, [campgroundState]);
 
   useEffect(() => {
     setDataLoaded(false);
@@ -99,20 +74,15 @@ export default function Campgrounds() {
     }
   }, []);
 
-  //{campgroundState[index].title}
-  const Row = ({ index, style }) => {
-    // /console.log(data[index]);
-    //console.log(campgroundState[index]);
 
-    return (
-     
-      <div className="virtualized-campground">
+  const Row = ({ index, style }) => {
+    return (     
+      <div className="virtualized-campground" style={style}>        
         <Campground
           key={campgroundState[index].id}
           campground={campgroundState[index]}
-        />
+        /> 
       </div>
-
     )
   };
 
@@ -121,42 +91,44 @@ export default function Campgrounds() {
       ref={ref}
       style={{
         ...style,
-        height: `${parseFloat(style.height) + GUTTER_SIZE * 2}px`,
-        padding: '10px'
+        //height: `${parseFloat(style.height) + GUTTER_SIZE * 2}px`,
+        height: '300px',
+        overflow: 'visible',
+        padding: '20px'
       }}
       {...rest}
     />
   ));
 
   return (
-    <>
+    <div>
       <div className="campgrounds">
         <ToastContainer />        
         { isDataLoaded ? (
-          <>
+          <div>
             <MapboxGLMap campgrounds={campgroundState} />
             <AutoSizer>
               {({ height, width }) => (
                 <List
                   className="list"
-                  height={height}
+                  height={height*2}
                   itemCount={campgroundState.length}
-                  itemSize={50}
+                  itemSize={(() => 600)}
                   width={width}
-                  innerElementType={innerElementType}
+                  //innerElementType={innerElementType}
                 >
                   {Row}
                 </List>
               )}
             </AutoSizer>
-          </>
+          </div>
           ) : ( <span>
                   <FontAwesomeIcon className="icon" icon="sun" size="7x" spin />
                 </span>                              
               )
         }
       </div>
-    </>
+    </div>
   );
 }
 
