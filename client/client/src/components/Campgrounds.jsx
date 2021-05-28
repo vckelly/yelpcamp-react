@@ -3,7 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import Campground from './Campground.jsx';
 import MapboxGLMap from './MapboxGLMap.jsx';
 import { UserContext } from '../UserContext.js';
-import { VariableSizeList as List } from "react-window";
+import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -113,7 +113,7 @@ export default function Campgrounds() {
                   className="list"
                   height={height*2}
                   itemCount={campgroundState.length}
-                  itemSize={(() => 600)}
+                  itemSize={600}
                   width={width}
                   //innerElementType={innerElementType}
                 >
