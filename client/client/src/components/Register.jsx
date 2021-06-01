@@ -1,35 +1,49 @@
 import { React, useEffect, useState } from 'react'
-import { Redirect } from "react-router-dom"; 
-import Button from 'react-bootstrap/Button'
-import Card from 'react-bootstrap/Card'
-import Container from 'react-bootstrap/Container'
-import Image from 'react-bootstrap/Image'
-import Form from 'react-bootstrap/Form'
-
+import { Redirect, useHistory, useLocation } from "react-router-dom"; 
+import { useFormik } from "formik";
+import * as yup from "yup";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Register() {
 
-    const [redirect, setRedirect] = useState(false);
-    const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const history = useHistory();
+    const location = useLocation();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const data = {
-            email: e.nativeEvent.target[0].value,
-            username: e.nativeEvent.target[1].value,
-            password: e.nativeEvent.target[2].value
-        };
-
-        setEmail('');
-        setUsername('');
-        setPassword('');
-
-        fetch('http://localhost:5000/register', {
+    const validationSchema = yup.object({
+        email: yup
+          .string("Enter your email address")
+          .email("Must be a valid email address")
+          .required("An email address is required"),
+        username: yup
+          .string("Enter a username")
+          .min(3, "Username should be at least 3 characters long")
+          .max(15, "Username should not be more than 15 characters long")
+          .required("Username is required"),
+        password: yup
+          .string("Enter your password")
+          .min(3, "Password should be of minimum 3 characters length")
+          .required("Password is required"),
+      });
+    
+      const formik = useFormik({
+        initialValues: {
+          email: "",
+          username: "",
+          password: "",
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+          const data = {
+            username: values.username,
+            password: values.password,
+            email: values.email
+          };
+    
+          fetch('http://localhost:5000/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -39,12 +53,18 @@ export default function Register() {
         }).then((res) => {
             //console.log("response", res);
             if (res.status === 200) {
-                setRedirect(true);
+                history.push({
+                    pathname: `/campgrounds/`,
+                    state: {
+                      from: "register",
+                    },
+                });
             }
             else {
                 res.json()
                 .then((resJSON) => {
                     console.log(resJSON);
+                    formik.resetForm();
                     toast.error(resJSON['error'], {
                         position: "top-right",
                         autoClose: 2500,
@@ -56,63 +76,167 @@ export default function Register() {
                     });
                 })
             }
-        })
-    };
+          });
+        },
+      });
+    
+      return (
+        <div className="container d-flex justify-content-center align-items-center mt-5">
+          <div className="row">
+            <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+              <div className="card shadow">
+                <img
+                  src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+                  alt=""
+                  className="card-img-top"
+                />
+              </div>
+              <ToastContainer />
+              <form onSubmit={formik.handleSubmit}>
+                <TextField
+                    fullWidth
+                    id="email"
+                    name="email"
+                    label="Email Address"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email && formik.errors.email}
+                />
+                <TextField
+                  fullWidth
+                  id="username"
+                  name="username"
+                  label="Username"
+                  value={formik.values.username}
+                  onChange={formik.handleChange}
+                  error={formik.touched.username && Boolean(formik.errors.username)}
+                  helperText={formik.touched.username && formik.errors.username}
+                />
+                <TextField
+                  fullWidth
+                  id="password"
+                  name="password"
+                  label="Password"
+                  type="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  error={formik.touched.password && Boolean(formik.errors.password)}
+                  helperText={formik.touched.password && formik.errors.password}
+                />
+                <Button color="primary" variant="contained" fullWidth type="submit">
+                  Submit
+                </Button>
+              </form>
+            </div>
+          </div>
+        </div>
+      );
+}
 
-    const handleEmailChange = (e) => { setEmail(e.target.value) };
-    const handleUsernameChange = (e) => { setUsername(e.target.value) };
-    const handlePasswordChange = (e) => { setPassword(e.target.value) };
+    
 
-    return (
-        <>
-        { redirect ? (
-            <Redirect 
-                to={{ pathname: "/campgrounds"}}
-            />
-        ) : (
-            <Container>
-            <ToastContainer />
-                <div className="row">
-                    <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
-                        <Card variant="shadow">
-                            <Image src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
-                                alt="" className="card-img-top"/>
-                            <Card.Body>
-                                <Card.Title>Register</Card.Title>
-                                <Form onSubmit={handleSubmit}>
-                                    <Form.Group controlId="email" >
-                                        <Form.Label>Email address</Form.Label>
-                                        <Form.Control type="email" 
-                                                      name="email"  
-                                                      value={email}
-                                                      onChange={handleEmailChange}/>
-                                        <Form.Text className="text-muted">
-                                        We'll never share your email with anyone else.
-                                        </Form.Text>
-                                    </Form.Group>
-                                    <Form.Group controlId="username">
-                                        <Form.Label>Username</Form.Label>
-                                        <Form.Control type="username" 
-                                                      name="username" 
-                                                      value={username}
-                                                      onChange={handleUsernameChange}/>
-                                    </Form.Group>
+    // const [redirect, setRedirect] = useState(false);
+    // const [email, setEmail] = useState('');
+    // const [username, setUsername] = useState('');
+    // const [password, setPassword] = useState('');
 
-                                    <Form.Group controlId="password">
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" 
-                                                      name="password" 
-                                                      value={password}
-                                                      onChange={handlePasswordChange}/>
-                                    </Form.Group>
-                                    <Button variant="success" type="submit">Register</Button>{' '}
-                                </Form>
-                            </Card.Body>
-                        </Card>
-                    </div>
-                </div>
-            </Container>
-            )}
-        </>
-    )
-};
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     const data = {
+    //         email: e.nativeEvent.target[0].value,
+    //         username: e.nativeEvent.target[1].value,
+    //         password: e.nativeEvent.target[2].value
+    //     };
+
+    //     setEmail('');
+    //     setUsername('');
+    //     setPassword('');
+
+    //     fetch('http://localhost:5000/register', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Accept': 'application/json'
+    //         },
+    //         body: JSON.stringify(data)
+    //     }).then((res) => {
+    //         //console.log("response", res);
+    //         if (res.status === 200) {
+    //             setRedirect(true);
+    //         }
+    //         else {
+    //             res.json()
+    //             .then((resJSON) => {
+    //                 console.log(resJSON);
+    //                 toast.error(resJSON['error'], {
+    //                     position: "top-right",
+    //                     autoClose: 2500,
+    //                     hideProgressBar: false,
+    //                     closeOnClick: true,
+    //                     pauseOnHover: true,
+    //                     draggable: true,
+    //                     progress: undefined,
+    //                 });
+    //             })
+    //         }
+    //     })
+    // };
+
+    // const handleEmailChange = (e) => { setEmail(e.target.value) };
+    // const handleUsernameChange = (e) => { setUsername(e.target.value) };
+    // const handlePasswordChange = (e) => { setPassword(e.target.value) };
+
+    // return (
+    //     <>
+    //     { redirect ? (
+    //         <Redirect 
+    //             to={{ pathname: "/campgrounds"}}
+    //         />
+    //     ) : (
+    //         <Container>
+    //         <ToastContainer />
+    //             <div className="row">
+    //                 <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+    //                     <Card variant="shadow">
+    //                         <Image src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+    //                             alt="" className="card-img-top"/>
+    //                         <Card.Body>
+    //                             <Card.Title>Register</Card.Title>
+    //                             <Form onSubmit={handleSubmit}>
+    //                                 <Form.Group controlId="email" >
+    //                                     <Form.Label>Email address</Form.Label>
+    //                                     <Form.Control type="email" 
+    //                                                   name="email"  
+    //                                                   value={email}
+    //                                                   onChange={handleEmailChange}/>
+    //                                     <Form.Text className="text-muted">
+    //                                     We'll never share your email with anyone else.
+    //                                     </Form.Text>
+    //                                 </Form.Group>
+    //                                 <Form.Group controlId="username">
+    //                                     <Form.Label>Username</Form.Label>
+    //                                     <Form.Control type="username" 
+    //                                                   name="username" 
+    //                                                   value={username}
+    //                                                   onChange={handleUsernameChange}/>
+    //                                 </Form.Group>
+
+    //                                 <Form.Group controlId="password">
+    //                                     <Form.Label>Password</Form.Label>
+    //                                     <Form.Control type="password" 
+    //                                                   name="password" 
+    //                                                   value={password}
+    //                                                   onChange={handlePasswordChange}/>
+    //                                 </Form.Group>
+    //                                 <Button variant="success" type="submit">Register</Button>{' '}
+    //                             </Form>
+    //                         </Card.Body>
+    //                     </Card>
+    //                 </div>
+    //             </div>
+    //         </Container>
+    //         )}
+    //     </>
+    // )
+//};

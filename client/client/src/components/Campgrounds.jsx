@@ -3,7 +3,6 @@ import { useHistory, useLocation } from "react-router-dom";
 import Campground from './Campground.jsx';
 import MapboxGLMap from './MapboxGLMap.jsx';
 import { UserContext } from '../UserContext.js';
-// import { FixedSizeList as List } from "react-window";
 import { FixedSizeGrid as Grid } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,17 +19,14 @@ export default function Campgrounds() {
   const [user, setUser] = useContext(UserContext);
   
   //console.log('From campgrounds', user, setUser);
+  const NUM_COLS = 4;
 
   const [campgroundState, setCampgroundState] = useState([]);
 
-  let campList = [];
-
-
   useEffect(() => {
     function computeGridDimensions(numCampgrounds) {
-      let numCols = 4;
-      let numRows = numCampgrounds % numCols === 0 ? numCampgrounds / numCols : (numCampgrounds / numCols) + 1;
-      return [numCols, parseInt(numRows)];
+      let numRows = numCampgrounds % NUM_COLS === 0 ? numCampgrounds / NUM_COLS : (numCampgrounds / NUM_COLS) + 1;
+      return [NUM_COLS, parseInt(numRows)];
     }
     async function fetchData () {
       try {
@@ -76,6 +72,10 @@ export default function Campgrounds() {
       if (location.state.from === 'show') {
         toast.success('Campground successfully deleted!', toastObj);
       }
+
+      if (location.state.from === 'register') {
+        toast.success('You have been succesfully registered!', toastObj);
+      }
       location.state = {};
     }
   }, []);
@@ -84,8 +84,8 @@ export default function Campgrounds() {
     return (     
       <div className="virtualized-campground" style={style}>        
         <Campground
-          key={campgroundState[columnIndex + rowIndex].id}
-          campground={campgroundState[columnIndex + rowIndex]}
+          key={campgroundState[columnIndex + (rowIndex * NUM_COLS)].id}
+          campground={campgroundState[columnIndex + (rowIndex * NUM_COLS)]}
         /> 
       </div>
     )

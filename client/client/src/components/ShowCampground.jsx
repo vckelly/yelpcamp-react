@@ -221,7 +221,7 @@ function ShowCampground() {
               {campgroundState.reviews.map((review) => {
                 return (
                   <Review
-                    key={review._id}
+                    key={review.id}
                     review={review}
                     campgroundId={id}
                     setToastState={setToastState}
