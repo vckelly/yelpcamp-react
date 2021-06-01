@@ -1,15 +1,41 @@
 import React, { useContext } from 'react'
+import { useHistory } from "react-router-dom"
 import Container from 'react-bootstrap/Container'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
+import Button from '@material-ui/core/Button';
 
 import { UserContext } from '../UserContext.js'
 
 export default function CustomNav() {
 
     const [user, setUser] = useContext(UserContext);
+    const history = useHistory();
     //console.log('From nav', user, setUser);
+
+    const handleLogout = (e) => {
+        e.preventDefault();  
+        
+        fetch('http://localhost:5000/logout', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then((res) => {           
+            if (res.ok) {
+                    setUser('');
+                    history.push({
+                        pathname: '/campgrounds',
+                        state: { 
+                            from: 'logout'
+                        }
+                    })
+                }
+            })
+    };
     return (
         <Navbar bg="dark" expand="lg" variant="lg" sticky="top">
             <Container className="fluid">
@@ -25,9 +51,11 @@ export default function CustomNav() {
                     </Nav>
                     <Nav className="justify-content-end" activeKey="/home">
                         { user ? 
-                            (<Nav.Item>
-                                <Nav.Link href="/logout">Logout</Nav.Link>
-                            </Nav.Item>): 
+                            (<Nav.Item >
+                                <Button color="secondary" variant="contained" onClick={handleLogout}>
+                                    Logout
+                                </Button>
+                            </Nav.Item>) :
                             (<>
                             <Nav.Item>
                                 <Nav.Link href="/register">Register</Nav.Link>

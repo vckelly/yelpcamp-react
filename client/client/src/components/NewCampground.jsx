@@ -53,7 +53,7 @@ export default function NewCampground() {
             };
             const formData = new FormData();
             formData.append('campground', JSON.stringify(data.campground));
-            if (files?.target.files)  { 
+            if (files?.target?.files)  { 
                 console.log(files.target.files[0]);
                 formData.append('image', files.target.files[0]) 
             };

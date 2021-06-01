@@ -54,3 +54,8 @@
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
+
+.show-campground-map {
+  width: 100vw;
+  height: 40vh;
+}

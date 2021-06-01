@@ -6,7 +6,6 @@ import EditCampground from "./components/EditCampground.jsx";
 import ShowCampground from "./components/ShowCampground.jsx";
 import Register from "./components/Register.jsx";
 import Login from "./components/Login.jsx";
-import Logout from "./components/Logout.jsx";
 import CustomNav from "./components/CustomNav.jsx";
 import { UserContext } from "./UserContext.js";
 import "./App.css";
@@ -74,10 +73,6 @@ function App() {
 
           <Route path="/login">
             <Login />
-          </Route>
-
-          <Route path="/logout">
-            <Logout />
           </Route>
 
           <Route path="/">

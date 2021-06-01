@@ -15,7 +15,6 @@ module.exports.renderNewForm = (req, res) => {
     res.render('campgrounds/new');
 }
 
-//TODO: Error handling for bad campground location data
 module.exports.createCampground = async (req, res, next) => {
     const parsedBody = JSON.parse(req.body.campground);
     const geoData = await geocoder.forwardGeocode({

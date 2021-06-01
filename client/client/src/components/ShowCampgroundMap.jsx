@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -40,6 +40,6 @@ const ShowCampgroundMap = ({ campground }) => {
           <div className="show-campground-map" ref={mapContainer}/>
       </div>
     );
-  };
+};
   
-  export default ShowCampgroundMap;
+export default ShowCampgroundMap;

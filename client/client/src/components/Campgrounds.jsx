@@ -69,6 +69,9 @@ export default function Campgrounds() {
       if (location.state.from === 'login') {
         toast.success('Welcome Back!', toastObj);
       }
+      if (location.state.from === 'logout') {
+        toast.success('Goodbye!', toastObj);
+      }
       if (location.state.from === 'show') {
         toast.success('Campground successfully deleted!', toastObj);
       }
