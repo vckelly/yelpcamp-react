@@ -3,7 +3,8 @@ import { useHistory, useLocation } from "react-router-dom";
 import Campground from './Campground.jsx';
 import MapboxGLMap from './MapboxGLMap.jsx';
 import { UserContext } from '../UserContext.js';
-import { FixedSizeList as List } from "react-window";
+// import { FixedSizeList as List } from "react-window";
+import { FixedSizeGrid as Grid } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +16,7 @@ export default function Campgrounds() {
   let history = useHistory();
   let location = useLocation();
   let [isDataLoaded, setDataLoaded] = useState('false');
+  let [gridDimensions, setGridDimensions] = useState(null);
   const [user, setUser] = useContext(UserContext);
   
   //console.log('From campgrounds', user, setUser);
@@ -25,6 +27,11 @@ export default function Campgrounds() {
 
 
   useEffect(() => {
+    function computeGridDimensions(numCampgrounds) {
+      let numCols = 4;
+      let numRows = numCampgrounds % numCols === 0 ? numCampgrounds / numCols : (numCampgrounds / numCols) + 1;
+      return [numCols, parseInt(numRows)];
+    }
     async function fetchData () {
       try {
         const response = await fetch('http://localhost:5000/campgrounds', {
@@ -38,17 +45,16 @@ export default function Campgrounds() {
           }
         });
         const json = await response.json();
+        setGridDimensions(computeGridDimensions(json.length));
         setCampgroundState(json);
         setDataLoaded(true);
       } catch (error) {}
     };
 
     if (campgroundState.length === 0) {
-
       fetchData();
     }  
     //TODO: check if this is correct way to load data with useEffect
-    
   // }, [campgroundState, isDataLoaded]);
   }, [campgroundState]);
 
@@ -74,13 +80,12 @@ export default function Campgrounds() {
     }
   }, []);
 
-
-  const Row = ({ index, style }) => {
+  const Cell = ({ columnIndex, rowIndex, style }) => {
     return (     
       <div className="virtualized-campground" style={style}>        
         <Campground
-          key={campgroundState[index].id}
-          campground={campgroundState[index]}
+          key={campgroundState[columnIndex + rowIndex].id}
+          campground={campgroundState[columnIndex + rowIndex]}
         /> 
       </div>
     )
@@ -109,16 +114,16 @@ export default function Campgrounds() {
             <MapboxGLMap campgrounds={campgroundState} />
             <AutoSizer>
               {({ height, width }) => (
-                <List
-                  className="list"
+                <Grid
+                  columnCount={gridDimensions[0]}
+                  columnWidth={300}
                   height={height*2}
-                  itemCount={campgroundState.length}
-                  itemSize={600}
+                  rowCount={gridDimensions[1]}
+                  rowHeight={600}
                   width={width}
-                  //innerElementType={innerElementType}
                 >
-                  {Row}
-                </List>
+                  {Cell}
+                </Grid>
               )}
             </AutoSizer>
           </div>
@@ -132,9 +137,3 @@ export default function Campgrounds() {
   );
 }
 
-
-// { campgroundState.map((camp) => (
-//   <Campground
-//     key={camp.id}
-//     campground={camp}
-//   />))}
