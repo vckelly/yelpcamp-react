@@ -135,7 +135,6 @@ function ShowCampground() {
   return (
     <div className="ShowCampground">
       <div className="row">
-        <ToastContainer />
         {isDataLoaded ? (
           <>
             <ShowCampgroundMap campground={campgroundState} />
@@ -193,9 +192,20 @@ function ShowCampground() {
               </Card>
             </div>
             <div className="col-6">
+              {campgroundState.reviews.length > 0 ? <h3>Reviews</h3> : '' }
+              {campgroundState.reviews.map((review) => {
+                return (
+                  <Review
+                    key={review.id}
+                    review={review}
+                    campgroundId={id}
+                    setToastState={setToastState}
+                  />
+                );
+              })}
               {user ? (
                 <>
-                  <h2>Leave a Review</h2>
+                  <h3>Leave a Review</h3>
                   <Form onSubmit={handleReview}>
                     <Rate
                       allowClear="true"
@@ -218,16 +228,6 @@ function ShowCampground() {
                   </Form>
                 </>
               ) : ("")}
-              {campgroundState.reviews.map((review) => {
-                return (
-                  <Review
-                    key={review.id}
-                    review={review}
-                    campgroundId={id}
-                    setToastState={setToastState}
-                  />
-                );
-              })}
             </div>
           </>
         ) : (

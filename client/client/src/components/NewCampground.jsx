@@ -93,7 +93,6 @@ export default function NewCampground() {
     
     return (
     <div>
-        <ToastContainer />
         <form onSubmit={formik.handleSubmit}>
         <TextField
             fullWidth

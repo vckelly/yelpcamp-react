@@ -82,7 +82,6 @@ export default function Login() {
               className="card-img-top"
             />
           </div>
-          <ToastContainer />
           <form onSubmit={formik.handleSubmit}>
             <TextField
               fullWidth

@@ -91,7 +91,6 @@ export default function Register() {
                   className="card-img-top"
                 />
               </div>
-              <ToastContainer />
               <form onSubmit={formik.handleSubmit}>
                 <TextField
                     fullWidth

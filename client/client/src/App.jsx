@@ -8,6 +8,7 @@ import Register from "./components/Register.jsx";
 import Login from "./components/Login.jsx";
 import CustomNav from "./components/CustomNav.jsx";
 import { UserContext } from "./UserContext.js";
+import { ToastContainer, toast } from 'react-toastify';
 import "./App.css";
 import {
   Route,
@@ -48,6 +49,7 @@ function App() {
 
   return (
     <UserContext.Provider value={contextHook}>
+      <ToastContainer />
       <div className="App">
         <CustomNav />
         <Switch>

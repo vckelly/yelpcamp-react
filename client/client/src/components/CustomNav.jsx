@@ -1,73 +1,79 @@
-import React, { useContext } from 'react'
-import { useHistory } from "react-router-dom"
-import Container from 'react-bootstrap/Container'
-import Nav from 'react-bootstrap/Nav'
-import Navbar from 'react-bootstrap/Navbar'
-import NavDropdown from 'react-bootstrap/NavDropdown'
-import Button from '@material-ui/core/Button';
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import Button from "@material-ui/core/Button";
 
-import { UserContext } from '../UserContext.js'
+import { UserContext } from "../UserContext.js";
 
 export default function CustomNav() {
+  const [user, setUser] = useContext(UserContext);
+  const history = useHistory();
+  //console.log('From nav', user, setUser);
 
-    const [user, setUser] = useContext(UserContext);
-    const history = useHistory();
-    //console.log('From nav', user, setUser);
+  const handleLogout = (e) => {
+    e.preventDefault();
 
-    const handleLogout = (e) => {
-        e.preventDefault();  
-        
-        fetch('http://localhost:5000/logout', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
-        }).then((res) => {           
-            if (res.ok) {
-                    setUser('');
-                    history.push({
-                        pathname: '/campgrounds',
-                        state: { 
-                            from: 'logout'
-                        }
-                    })
-                }
-            })
-    };
-    return (
-        <Navbar bg="dark" expand="lg" variant="lg" sticky="top">
-            <Container className="fluid">
-                <Navbar.Brand href="/home">ReactCamp</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">
-                        <Nav.Link href="/home">Home</Nav.Link>
-                        <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
-                        { user ? (
-                            <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
-                        ) : ('')}
-                    </Nav>
-                    <Nav className="justify-content-end" activeKey="/home">
-                        { user ? 
-                            (<Nav.Item >
-                                <Button color="secondary" variant="contained" onClick={handleLogout}>
-                                    Logout
-                                </Button>
-                            </Nav.Item>) :
-                            (<>
-                            <Nav.Item>
-                                <Nav.Link href="/register">Register</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link href="/login">Login</Nav.Link>
-                            </Nav.Item>
-                            </>)
-                        }
-                    </Nav>
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
-    )
-};
+    fetch("http://localhost:5000/logout", {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }).then((res) => {
+      if (res.ok) {
+        setUser({ user: "" });
+        history.push({
+          pathname: "/campgrounds",
+          state: {
+            from: "logout",
+          },
+        });
+      }
+    });
+  };
+  return (
+    <Navbar bg="dark" expand="lg" variant="lg" sticky="top">
+      <Container className="fluid">
+        <Navbar.Brand href="/home">ReactCamp</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="/home">Home</Nav.Link>
+            <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
+            {user ? (
+              <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
+            ) : (
+              ""
+            )}
+          </Nav>
+          <Nav className="justify-content-end" activeKey="/home">
+            {user?.user ? (
+              <Nav.Item>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </Nav.Item>
+            ) : (
+              <>
+                <Nav.Item>
+                  <Nav.Link href="/register">Register</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link href="/login">Login</Nav.Link>
+                </Nav.Item>
+              </>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
+}

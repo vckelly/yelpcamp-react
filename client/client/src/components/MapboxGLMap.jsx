@@ -143,8 +143,6 @@ const MapboxGLMap = ({ campgrounds }) => {
         });
 
         map.addControl(new mapboxgl.NavigationControl());
-
-        console.log(map);
         return () => map.remove();
     });
   }, []);

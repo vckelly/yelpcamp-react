@@ -84,34 +84,24 @@ export default function Campgrounds() {
   }, []);
 
   const Cell = ({ columnIndex, rowIndex, style }) => {
-    return (     
-      <div className="virtualized-campground" style={style}>        
-        <Campground
-          key={campgroundState[columnIndex + (rowIndex * NUM_COLS)].id}
-          campground={campgroundState[columnIndex + (rowIndex * NUM_COLS)]}
-        /> 
-      </div>
-    )
+    let curIndex = columnIndex + (rowIndex * NUM_COLS);
+    if (curIndex < campgroundState?.length) {
+      return (     
+        <div className="virtualized-campground" style={style}>        
+          <Campground
+            key={campgroundState[curIndex].id}
+            campground={campgroundState[curIndex]}
+          /> 
+        </div>
+      )
+    }
+    return null;
   };
-
-  const innerElementType = forwardRef(({ style, ...rest }, ref) => (
-    <div
-      ref={ref}
-      style={{
-        ...style,
-        //height: `${parseFloat(style.height) + GUTTER_SIZE * 2}px`,
-        height: '300px',
-        overflow: 'visible',
-        padding: '20px'
-      }}
-      {...rest}
-    />
-  ));
 
   return (
     <div>
       <div className="campgrounds">
-        <ToastContainer />        
+        
         { isDataLoaded ? (
           <div>
             <MapboxGLMap campgrounds={campgroundState} />
