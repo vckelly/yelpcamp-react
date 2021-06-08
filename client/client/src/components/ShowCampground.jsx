@@ -149,6 +149,7 @@ function ShowCampground() {
                           className="d-block w-100"
                           src={img.url}
                           alt="Slide Here"
+                          className="showCampground-img"
                         />
                       </Carousel.Item>
                     );

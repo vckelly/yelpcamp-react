@@ -9,9 +9,9 @@ import Card from 'react-bootstrap/Card';
 
 function Campground(camp) {
   return (
-    <Card style={{ width: '18rem' }}>
+    <Card style={{ width: '18rem'}}>
       { camp.campground.images.length > 0 ? 
-        <Card.Img variant="top" src={camp.campground.images[0].url} />
+        <Card.Img variant="top" src={camp.campground.images[0].url} className="campground-img" fluid/>
         : ''}
       <Card.Body>
         <Card.Title>{camp.campground.title}</Card.Title>
