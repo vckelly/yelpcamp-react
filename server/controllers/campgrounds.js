@@ -63,6 +63,7 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
     const parsedBody = JSON.parse(req.body.campground);
+    console.log(req.body, parsedBody);
     const campground = await Campground.findByIdAndUpdate(id, { ...parsedBody });
     if (req.body.locationChange) {
         const geoData = await geocoder.forwardGeocode({
@@ -78,13 +79,12 @@ module.exports.updateCampground = async (req, res) => {
             filename: req.file.filename
         });
     }
-    await campground.save();
     if (req.body.deleteImages) {
-        for (let filename of req.body.deleteImages) {
-            await cloudinary.uploader.destroy(filename);
-        }
-        await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
+        const parsedFiles = req.body.deleteImages.split(',');
+        parsedFiles.forEach(async (filename) => { await cloudinary.uploader.destroy(filename) });
+        await campground.updateOne({ $pull: { images: { filename: { $in: parsedFiles } } } })
     }
+    await campground.save();
     res.redirect(`/campgrounds/${campground._id}`)
 }
 
