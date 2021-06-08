@@ -36,7 +36,7 @@ export default function CustomNav() {
     });
   };
   return (
-    <Navbar bg="dark" expand="lg" variant="lg" sticky="top">
+    <Navbar bg="dark" expand="lg" variant="lg" sticky="top" className="nav">
       <Container className="fluid">
         <Navbar.Brand href="/home">ReactCamp</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -16,7 +16,7 @@ const MapboxGLMap = ({ campgrounds }) => {
     
     const map = new mapboxgl.Map({
         container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/outdoors-v10',
+        style: 'mapbox://styles/mapbox/outdoors-v10?optimize=true',
         center: [-103.59179687498357, 40.66995747013945],
         zoom: 3
     });        
@@ -30,8 +30,6 @@ const MapboxGLMap = ({ campgrounds }) => {
         //console.log("FROM Mapbox COMPONENT", campObj);
         map.addSource('campgrounds', {
             type: 'geojson',
-            // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-            // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
             data: campObj,
             cluster: true,
             clusterMaxZoom: 14, // Max zoom to cluster points on
