@@ -79,7 +79,7 @@ export default function Campgrounds() {
       if (location.state.from === 'register') {
         toast.success('You have been succesfully registered!', toastObj);
       }
-      location.state = {};
+      location.state.user = '';
     }
   }, []);
 

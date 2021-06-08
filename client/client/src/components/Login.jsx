@@ -48,6 +48,7 @@ export default function Login() {
         console.log(res);
 
         if (res.ok) {
+          setUser({ user: values.username });
           history.push({
             pathname: `/campgrounds/`,
             state: {

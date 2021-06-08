@@ -63,7 +63,7 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
     const parsedBody = JSON.parse(req.body.campground);
-    console.log(req.body, parsedBody);
+    //console.log(req.body, parsedBody);
     const campground = await Campground.findByIdAndUpdate(id, { ...parsedBody });
     if (req.body.locationChange) {
         const geoData = await geocoder.forwardGeocode({
