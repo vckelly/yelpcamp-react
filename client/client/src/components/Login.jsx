@@ -75,6 +75,7 @@ export default function Login() {
   return (
     <div className="container d-flex justify-content-center align-items-center mt-5">
       <div className="row">
+        <h2>Login</h2>
         <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
           <div className="card shadow">
             <img
@@ -93,6 +94,7 @@ export default function Login() {
               onChange={formik.handleChange}
               error={formik.touched.username && Boolean(formik.errors.username)}
               helperText={formik.touched.username && formik.errors.username}
+              style={{ padding: "1vh" }}
             />
             <TextField
               fullWidth
@@ -104,6 +106,7 @@ export default function Login() {
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
+              style={{ padding: "1vh" }}
             />
             <Button color="primary" variant="contained" fullWidth type="submit">
               Submit

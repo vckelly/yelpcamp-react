@@ -16,7 +16,9 @@ export default function NewCampground() {
   const fileInput = useRef(null);
 
   const validationSchema = yup.object({
-    title: yup.string("Enter your title").required("title is required"),
+    title: yup.string("Enter your title")
+              .required("title is required")
+              .min(3, "Title should be of minimum 3 characters length"),
     location: yup
       .string("Enter your location")
       .min(3, "Location should be of minimum 3 characters length")
@@ -89,7 +91,7 @@ export default function NewCampground() {
 
   return (
     <div className="container d-flex justify-content-center align-items-center mt-5">
-        <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+        <div className="col-md-6 col-xl-4">
           <h2>Create Campground</h2>
           <div className="card shadow">
             <img
@@ -128,7 +130,7 @@ export default function NewCampground() {
               <TextField
                 id="price"
                 name="price"
-                label="Price"
+                label="Price ($)"
                 type="number"
                 onChange={formik.handleChange}
                 value={formik.values.price}
