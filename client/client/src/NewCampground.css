@@ -1,0 +1,9 @@
+.new-campground-form {
+  justify-content: center;
+  padding: 5px;  
+}
+
+.custom-btn {
+  padding: 10px;
+  border: red;
+}

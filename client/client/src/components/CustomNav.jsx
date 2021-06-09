@@ -44,7 +44,7 @@ export default function CustomNav() {
           <Nav className="mr-auto">
             <Nav.Link href="/home">Home</Nav.Link>
             <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
-            {user ? (
+            {user?.user ? (
               <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
             ) : (
               ""
