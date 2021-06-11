@@ -6,6 +6,7 @@ import EditCampground from "./components/EditCampground.jsx";
 import ShowCampground from "./components/ShowCampground.jsx";
 import Register from "./components/Register.jsx";
 import Login from "./components/Login.jsx";
+import Error from "./components/Error.jsx";
 import CustomNav from "./components/CustomNav.jsx";
 import { UserContext } from "./UserContext.js";
 import { ToastContainer, toast } from 'react-toastify';
@@ -53,33 +54,38 @@ function App() {
       <div className="App">
         <CustomNav />
         <Switch>
-          <Route path="/campgrounds/:id/edit">
+          <Route exact path="/campgrounds/:id/edit">
             <EditCampground />
           </Route>
 
-          <Route path="/campgrounds/new">
+          <Route exact path="/campgrounds/new">
             <NewCampground />
           </Route>
 
-          <Route path="/campgrounds/:id">
+          <Route exact path="/campgrounds/:id">
             <ShowCampground />
           </Route>
 
-          <Route path="/campgrounds">
+          <Route exact path="/campgrounds" >
             <Campgrounds />
           </Route>
 
-          <Route path="/register">
+          <Route exact path="/register">
             <Register />
           </Route>
 
-          <Route path="/login">
+          <Route exact path="/login">
             <Login />
           </Route>
 
-          <Route path="/">
+          <Route exact path="/">
             <Home />
           </Route>
+
+          <Route path="*">
+            <Error />
+          </Route>
+          
         </Switch>
       </div>
     </UserContext.Provider>

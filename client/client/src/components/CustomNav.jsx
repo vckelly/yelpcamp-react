@@ -38,11 +38,11 @@ export default function CustomNav() {
   return (
     <Navbar bg="dark" expand="lg" variant="lg" sticky="top" className="nav">
       <Container className="fluid">
-        <Navbar.Brand href="/home">ReactCamp</Navbar.Brand>
+        <Navbar.Brand href="/">ReactCamp</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="/home">Home</Nav.Link>
+            <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
             {user?.user ? (
               <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
