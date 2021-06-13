@@ -8,20 +8,20 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
 export default function Error() {
-  let history = useHistory();
-  let location = useLocation();
+//   let history = useHistory();
+//   let location = useLocation();
   let [userCon, setUser] = useContext(UserContext);
 
   const campButton = (
-    <Button variant="contained" color="primary" component={Link}>
-        View Campgrounds
-    </Button>
+    <Link to='/campgrounds' style={{'padding': '1vh'}}>
+        Campgrounds
+    </Link>
   );
 
   const homeButton = (
-    <Button variant="contained" color="primary" component={Link}>
+    <Link to='/' style={{'padding': '1vh'}}>
        Home
-    </Button>
+    </Link>
 
   );
 
@@ -33,12 +33,11 @@ export default function Error() {
             <img
                 src="https://res.cloudinary.com/vckelly/image/upload/v1623451948/YelpCamp/charles-deluvio-bYXP-ITv4_s-unsplash_syzerm.jpg"
                 alt=""
-                style={{"margin": "0 auto", "max-height": "65vh" }}
+                style={{"margin": "0 auto", "maxHeight": "65vh" }}
             />
-            <Router>
-                <p>We checked all of our maps but couldn't find what you were looking for. Sorry!</p>
-                <p>Let's get back to...{homeButton} {campButton}</p>
-            </Router>
+            <p>We checked all of our maps but couldn't find what you were looking for. Sorry!</p>
+            <p>Let's get back to...</p>
+            <p>{homeButton} {campButton}</p>
         </div>
       </div>
     </div>
