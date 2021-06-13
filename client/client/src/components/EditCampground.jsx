@@ -1,7 +1,8 @@
-import { React, useEffect, useState, useRef } from "react";
+import { React, useEffect, useState, useRef, useContext } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from '../UserContext.js';
 
 import { Field, useFormik } from "formik";
 import * as yup from "yup";
@@ -13,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function EditCampground() {
   let { id } = useParams();
   const history = useHistory();
+  const [user, setUser] = useContext(UserContext);
   const [campgroundState, setCampgroundState] = useState(null);
   const [isDataLoaded, setLoaded] = useState(false);
   const [title, setTitle] = useState("");
@@ -39,18 +41,29 @@ export default function EditCampground() {
       } catch (error) {}
     }
     fetchData();
+    if (user?.user?.length === 0) {
+      history.push({
+        pathname: `/login/`,
+        state: {
+          from: "edit",
+        }
+      })
+    };
     console.log(campgroundState, title);
   }, []);
 
   const validationSchema = yup.object({
-    title: yup.string("Enter your title").required("title is required"),
+    title: yup
+      .string("Enter your title")
+      .min(3, "Title should be of minimum 3 characters length")
+      .required("title is required"),
     location: yup
       .string("Enter your location")
       .min(3, "Location should be of minimum 3 characters length")
       .required("location is required"),
     price: yup
       .number("Enter your price")
-      .min(1, "Price should be of minimum of $1")
+      .min(1, "Price should be a minimum of $1")
       .required("price is required"),
     description: yup
       .string("Enter your description")
@@ -112,94 +125,105 @@ export default function EditCampground() {
   });
 
   return (
-        <>
-        <ToastContainer />
-        {isDataLoaded ? (
-            <div className="container d-flex justify-content-center align-items-center mt-5">
-                <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
-                  <h2>Edit Campground</h2>
-                    <form onSubmit={formik.handleSubmit}>
-                        <TextField
-                        fullWidth
-                        id="title"
-                        name="title"
-                        label="Title"
-                        onChange={formik.handleChange}
-                        value={formik.values.title}
-                        error={formik.touched.title && Boolean(formik.errors.title)}
-                        helperText={formik.touched.title && formik.errors.title}
-                        />
-                        <TextField
-                        fullWidth
-                        id="location"
-                        name="location"
-                        label="Location"
-                        onChange={formik.handleChange}
-                        value={formik.values.location}
-                        error={formik.touched.location && Boolean(formik.errors.location)}
-                        helperText={formik.touched.location && formik.errors.location}
-                        />
-                        <TextField
-                        fullWidth
-                        id="price"
-                        name="price"
-                        label="Price"
-                        type="number"
-                        onChange={formik.handleChange}
-                        value={formik.values.price}
-                        error={formik.touched.price && Boolean(formik.errors.price)}
-                        helperText={formik.touched.price && formik.errors.price}
-                        />
-                        <TextField
-                        fullWidth
-                        id="description"
-                        name="description"
-                        label="Description"
-                        onChange={formik.handleChange}
-                        value={formik.values.description}
-                        error={
-                            formik.touched.description && Boolean(formik.errors.description)
-                        }
-                        helperText={
-                            formik.touched.description && formik.errors.description
-                        }
-                        />
+    <>
+      <ToastContainer />
+      {isDataLoaded ? (
+        <div className="container d-flex justify-content-center align-items-center mt-5">
+          <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+            <h2>Edit Campground</h2>
+            <form onSubmit={formik.handleSubmit}>
+              <TextField
+                fullWidth
+                id="title"
+                name="title"
+                label="Title"
+                onChange={formik.handleChange}
+                value={formik.values.title}
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
+                style={{ padding: "1vh" }}
+              />
+              <TextField
+                fullWidth
+                id="location"
+                name="location"
+                label="Location"
+                onChange={formik.handleChange}
+                value={formik.values.location}
+                error={
+                  formik.touched.location && Boolean(formik.errors.location)
+                }
+                helperText={formik.touched.location && formik.errors.location}
+                style={{ padding: "1vh" }}
+              />
+              <TextField
+                fullWidth
+                id="price"
+                name="price"
+                label="Price"
+                type="number"
+                onChange={formik.handleChange}
+                value={formik.values.price}
+                error={formik.touched.price && Boolean(formik.errors.price)}
+                helperText={formik.touched.price && formik.errors.price}
+                style={{ padding: "1vh" }}
+              />
+              <TextField
+                fullWidth
+                id="description"
+                name="description"
+                label="Description"
+                onChange={formik.handleChange}
+                value={formik.values.description}
+                error={
+                  formik.touched.description &&
+                  Boolean(formik.errors.description)
+                }
+                helperText={
+                  formik.touched.description && formik.errors.description
+                }
+                style={{ padding: "1vh" }}
+              />
 
-                        <Button variant="contained" component="label">
-                        Upload Image
-                        <input
-                            type="file"
-                            id="image"
-                            ref={fileInput}
-                            onChange={setFiles}
-                            hidden
-                        />
-                        </Button>
-                        {campgroundState.images.map((img) => {
-                            return (
-                                <div>
-                                <img src={img.url} className="img-thumbnail"></img>
-                                <Checkbox
-                                    id={img.filename}
-                                    label="Delete?"
-                                    onChange={(e) => {
-                                    setDeleteImages((prev) => [...prev, e.target.id]);
-                                    }}
-                                />
-                                <p>Delete Image?</p>
-                                </div>
-                            );
-                        })}
-                        <Button color="primary" variant="contained" fullWidth type="submit">
-                            Edit Campground
-                        </Button>
-                    </form>
-                </div>
-            </div>
-        ) : (
-          <FontAwesomeIcon className="icon" icon="sun" size="7x" spin />
-        )
-    }
+              <Button variant="contained" component="label">
+                Upload Image
+                <input
+                  type="file"
+                  id="image"
+                  ref={fileInput}
+                  onChange={setFiles}
+                  hidden
+                />
+              </Button>
+              {campgroundState.images.map((img) => {
+                return (
+                  <div>
+                    <img src={img.url} className="img-thumbnail"></img>
+                    <Checkbox
+                      id={img.filename}
+                      label="Delete?"
+                      onChange={(e) => {
+                        setDeleteImages((prev) => [...prev, e.target.id]);
+                      }}
+                    />
+                    <p>Delete Image?</p>
+                  </div>
+                );
+              })}
+              <Button
+                color="primary"
+                variant="contained"
+                fullWidth
+                type="submit"
+              >
+                Edit Campground
+              </Button>
+            </form>
+          </div>
+        </div>
+      ) : (
+        <FontAwesomeIcon className="icon" icon="sun" size="7x" spin />
+      )}
     </>
   );
 }

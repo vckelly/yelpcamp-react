@@ -1,6 +1,7 @@
-import { React, useEffect, useState, useRef } from "react";
+import { React, useEffect, useState, useRef, useContext } from "react";
 import { Redirect, useParams, useHistory } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { UserContext } from '../UserContext.js';
 import "react-toastify/dist/ReactToastify.css";
 import "../NewCampground.css";
 
@@ -13,6 +14,7 @@ export default function NewCampground() {
   const history = useHistory();
   const [redirect, setRedirect] = useState(false);
   const [files, setFiles] = useState([]);
+  const [user, setUser] = useContext(UserContext);
   const fileInput = useRef(null);
 
   const validationSchema = yup.object({
@@ -88,6 +90,17 @@ export default function NewCampground() {
       });
     },
   });
+
+  useEffect(() => {
+    if (user?.user?.length === 0) {
+      history.push({
+        pathname: `/login/`,
+        state: {
+          from: "edit",
+        }
+      })
+    };
+  }, [user.user]);
 
   return (
     <div className="container d-flex justify-content-center align-items-center mt-5">

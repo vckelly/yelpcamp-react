@@ -72,6 +72,27 @@ export default function Login() {
     },
   });
 
+  useEffect(() => {
+    if (location.state) {
+      const toastObj = {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        };
+      if (location.state.from === 'edit') {
+        toast.error('Please login to edit campgrounds!', toastObj);
+      }
+      if (location.state.from === 'new') {
+        toast.error('Please login to create campgrounds!', toastObj);
+      }
+      location.state.user = '';
+    }
+  }, []);
+  
   return (
     <div className="container d-flex justify-content-center align-items-center mt-5">
       <div className="row">

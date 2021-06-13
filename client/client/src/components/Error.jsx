@@ -1,20 +1,10 @@
-import { React, useEffect, useState, useContext } from "react";
-import { Router, Link, useHistory, useLocation } from "react-router-dom";
-import { UserContext } from "../UserContext.js";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import { React, useContext } from "react";
+import { Link } from "react-router-dom";
 
 export default function Error() {
-//   let history = useHistory();
-//   let location = useLocation();
-  let [userCon, setUser] = useContext(UserContext);
-
   const campButton = (
     <Link to='/campgrounds' style={{'padding': '1vh'}}>
-        Campgrounds
+       View Campgrounds
     </Link>
   );
 
