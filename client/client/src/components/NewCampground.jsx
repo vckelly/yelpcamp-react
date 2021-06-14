@@ -92,6 +92,16 @@ export default function NewCampground() {
   });
 
   useEffect(() => {
+    // setTimeout(() => {
+    //   if (user?.user?.length === 0) {
+    //   history.push({
+    //     pathname: `/login/`,
+    //     state: {
+    //       from: "edit",
+    //     }
+    //   })
+    // }}, 1000);
+    
     if (user?.user?.length === 0) {
       history.push({
         pathname: `/login/`,
@@ -99,8 +109,11 @@ export default function NewCampground() {
           from: "edit",
         }
       })
-    };
-  }, [user.user]);
+    }
+
+    
+    // };
+  }, []);
 
   return (
     <div className="container d-flex justify-content-center align-items-center mt-5">

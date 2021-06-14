@@ -39,8 +39,8 @@ export default function CustomNav() {
     <Navbar bg="dark" expand="lg" variant="lg" sticky="top" className="nav">
       <Container className="fluid">
         <Navbar.Brand href="/">ReactCamp</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
