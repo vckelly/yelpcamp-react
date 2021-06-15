@@ -8,11 +8,18 @@ import Button from "@material-ui/core/Button";
 
 import { UserContext } from "../UserContext.js";
 
-export default function CustomNav() {
+import { QueryClient, useQueryClient } from 'react-query';
+
+export default async function CustomNav() {
   const [user, setUser] = useContext(UserContext);
   const history = useHistory();
   //console.log('From nav', user, setUser);
 
+  const queryClient = useQueryClient();
+
+
+  const data = queryClient.getQueryData('user');
+  console.log('FROM NAV', data);
   const handleLogout = (e) => {
     e.preventDefault();
 

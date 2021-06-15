@@ -28,6 +28,8 @@ module.exports.register = async (req, res, next) => {
 
 module.exports.login = async (req, res) => {
   console.log('login', req.body, req.session);
+  req.session.user = req.session.passport.user;
+  console.log("post mutation", req.session);
   const redirectUrl = req.session.returnTo || '/campgrounds';
   delete req.session.returnTo;
   res.redirect(redirectUrl);

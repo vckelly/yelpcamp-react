@@ -91,30 +91,6 @@ export default function NewCampground() {
     },
   });
 
-  useEffect(() => {
-    // setTimeout(() => {
-    //   if (user?.user?.length === 0) {
-    //   history.push({
-    //     pathname: `/login/`,
-    //     state: {
-    //       from: "edit",
-    //     }
-    //   })
-    // }}, 1000);
-    
-    if (user?.user?.length === 0) {
-      history.push({
-        pathname: `/login/`,
-        state: {
-          from: "edit",
-        }
-      })
-    }
-
-    
-    // };
-  }, []);
-
   return (
     <div className="container d-flex justify-content-center align-items-center mt-5">
         <div className="col-md-6 col-xl-4">

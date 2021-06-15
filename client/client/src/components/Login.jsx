@@ -41,12 +41,10 @@ export default function Login() {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
+          "Accept": "application/json",
         },
         body: JSON.stringify(data),
       }).then((res) => {
-        console.log(res);
-
         if (res.ok) {
           setUser({ user: values.username });
           history.push({

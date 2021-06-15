@@ -53,23 +53,24 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize());
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
 
 const sessionConfig = {
+  name: 'qid',
   secret: 'secret',
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    secure: false,
+    secure: process.env.NODE_ENV === "production",
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7
+    maxAge: 1000 * 60 * 60 * 24 * 2 // two days
   }
-
 }
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
+
 app.use(session(sessionConfig));
 app.use(flash());
 app.use(helmet());
