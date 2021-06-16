@@ -47,6 +47,8 @@ export default function Login() {
       }).then((res) => {
         if (res.ok) {
           setUser({ user: values.username });
+          console.log("From login", userCon);
+          window.localStorage.setItem('user', values.username);
           history.push({
             pathname: `/campgrounds/`,
             state: {
@@ -81,11 +83,8 @@ export default function Login() {
         draggable: true,
         progress: undefined,
         };
-      if (location.state.from === 'edit') {
-        toast.error('Please login to edit campgrounds!', toastObj);
-      }
-      if (location.state.from === 'new') {
-        toast.error('Please login to create campgrounds!', toastObj);
+      if (location.state.from === 'unauthorized') {
+        toast.error('Please login first!', toastObj);
       }
       location.state.user = '';
     }

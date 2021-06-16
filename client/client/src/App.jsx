@@ -23,6 +23,7 @@ import {
 import {
   useQuery,
   useQueryClient,
+  QueryCache,
   QueryClient,
   QueryClientProvider,
 } from "react-query";
@@ -32,73 +33,65 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSun } from '@fortawesome/free-solid-svg-icons';
 library.add(faSun);
 
+const queryCache = new QueryCache({
+  onError: error => {
+    console.log(error)
+  },
+});
+
 function App() {
   const contextHook = useState(useContext(UserContext));
   const location = useLocation();
-  //const queryClient = useQueryClient();
-  let authenticated = false;
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: Infinity,
-      },
-    }
-  });
-
-  const { isLoading, isError, data } = useQuery('user', async () => {
-      const res = await fetch("http://localhost:5000/users/logged_in", {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Access-Control-Allow-Origin": "http://localhost:3000/*",
-          "Access-Control-Allow-Credentials": true,
-        }
-      })
-      return res.json();
-    }
-  );
-
-  console.log(data);
-
   
-  // useEffect(() => {
-  //   //console.log(contextHook, contextHook[0]);
-  //   fetch("http://localhost:5000/users/logged_in", {
-  //     method: "GET",
-  //     credentials: "include",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "Accept": "application/json",
-  //       "Access-Control-Allow-Origin": "http://localhost:3000/*",
-  //       "Access-Control-Allow-Credentials": true,
-  //     }
-  //   }).then((res) => {
-  //     //console.log('********from logged_in fetch*******', res, contextHook)
-  //     res.json().then((user) => {
-  //       console.log('user from res', user);
-  //       authenticated = user.length > 0;
-  //       if (user.user !== contextHook[0].user) { 
-  //         contextHook[1](user);
+  const user = window.localStorage.getItem('user');
+  console.log("From app", contextHook[0], user);
+  //const queryClient = useQueryClient();
+
+  // const queryClient = new QueryClient({
+  //   defaultOptions: {
+  //     queries: {
+  //       staleTime: Infinity,
+  //     },
+  //   }
+  // });
+
+
+  // const { isLoading, isError, data } = useQuery('user', async () => {
+  //     const res = await fetch("http://localhost:5000/users/logged_in", {
+  //       method: "GET",
+  //       credentials: "include",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Accept": "application/json",
+  //         "Access-Control-Allow-Origin": "http://localhost:3000/*",
+  //         "Access-Control-Allow-Credentials": true,
   //       }
   //     });
-  //   });
-  //   authenticated = contextHook[0].user.length > 0;
-  //   console.log("AUTHENTICATED", authenticated);
-  // }, [contextHook[0].user]);
+  //     return res.json();
+  //   }
+  // );
 
+  // console.log('From app', data);
 
+  // const queryCache = new QueryCache({
+  //   onError: error => {
+  //     console.log(error)
+  //   },
+  // });
+  // const query = queryCache.findAll('user');
+
+  //console.log('From app query cache', query);
+  
   //Tyler McGinnis' protected route component
   function PrivateRoute({ children, ...rest }) {
+    console.log("Form privateRoute", user);
     return (
       <Route {...rest} render={({ location }) => {
-        return authenticated === true
+        return user.length > 0 
           ? children
           : <Redirect to={{
               pathname: '/login',
-              state: { from: location }
+              state: { from: 'unauthorized' }
             }} />
       }} />
     )

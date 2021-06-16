@@ -28,7 +28,8 @@ function ShowCampground() {
 
   //if (location) { console.log("LOCATION", location.state) };
   //if (history) { console.log("history", history) };
-  const [user, setUser] = useContext(UserContext);
+  const [userCon, setUser] = useContext(UserContext);
+  const user = window.localStorage.getItem('user');
 
   //TODO: Add delete button/functionality
 
@@ -174,7 +175,7 @@ function ShowCampground() {
                     {"$" + campgroundState.price + "/night"}
                   </ListGroup.Item>
                 </ListGroup>
-                {user?.user === campgroundState.author.username ? (
+                {user === campgroundState.author.username ? (
                   <>
                     <Link
                       to={`/campgrounds/${id}/edit`}
@@ -204,7 +205,7 @@ function ShowCampground() {
                   />
                 );
               })}
-              {user ? (
+              {user.length > 0 ? (
                 <>
                   <h3>Leave a Review</h3>
                   <Form onSubmit={handleReview}>

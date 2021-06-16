@@ -8,18 +8,22 @@ import Button from "@material-ui/core/Button";
 
 import { UserContext } from "../UserContext.js";
 
-import { QueryClient, useQueryClient } from 'react-query';
+import { QueryClient, useQueryClient, QueryCache } from 'react-query';
 
-export default async function CustomNav() {
-  const [user, setUser] = useContext(UserContext);
+export default function CustomNav(props) {
+  const [userCon, setUser] = useContext(UserContext);
   const history = useHistory();
+  const user = window.localStorage.getItem('user');
   //console.log('From nav', user, setUser);
 
-  const queryClient = useQueryClient();
+  // const queryCache = new QueryCache({
+  //   onError: error => {
+  //     console.log(error)
+  //   },
+  // });
+  // const query = queryCache.findAll('user');
+  // console.log('From nav', query, user);
 
-
-  const data = queryClient.getQueryData('user');
-  console.log('FROM NAV', data);
   const handleLogout = (e) => {
     e.preventDefault();
 
@@ -33,6 +37,7 @@ export default async function CustomNav() {
     }).then((res) => {
       if (res.ok) {
         setUser({ user: "" });
+        window.localStorage.setItem('user', '');
         history.push({
           pathname: "/campgrounds",
           state: {
@@ -51,14 +56,14 @@ export default async function CustomNav() {
           <Nav className="mr-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
-            {user?.user ? (
+            {user ? (
               <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
             ) : (
               ""
             )}
           </Nav>
           <Nav className="justify-content-end" activeKey="/home">
-            {user?.user ? (
+            {user.length > 0 ? (
               <Nav.Item>
                 <Button
                   color="secondary"

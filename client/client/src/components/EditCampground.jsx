@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function EditCampground() {
   let { id } = useParams();
   const history = useHistory();
-  const [user, setUser] = useContext(UserContext);
+  const [userCon, setUser] = useContext(UserContext);
   const [campgroundState, setCampgroundState] = useState(null);
   const [isDataLoaded, setLoaded] = useState(false);
   const [title, setTitle] = useState("");
@@ -23,7 +23,7 @@ export default function EditCampground() {
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState([]);
   const [deleteImages, setDeleteImages] = useState([]);
-
+  const user = window.localStorage.getItem('user');
   const fileInput = useRef(null);
 
   useEffect(() => {
@@ -41,16 +41,16 @@ export default function EditCampground() {
       } catch (error) {}
     }
     fetchData();
-    if (user?.user?.length === 0) {
+    console.log('From edit campground', campgroundState?.author?.username, user);
+    if (isDataLoaded && campgroundState?.author?.username !== JSON.stringify(user)) {
       history.push({
         pathname: `/login/`,
         state: {
-          from: "edit",
+          from: "unauthorized",
         }
       })
-    };
-    console.log(campgroundState, title);
-  }, []);
+    };    
+  }, [isDataLoaded]);
 
   const validationSchema = yup.object({
     title: yup
