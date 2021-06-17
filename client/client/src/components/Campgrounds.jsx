@@ -79,6 +79,9 @@ export default function Campgrounds() {
       if (location.state.from === 'register') {
         toast.success('You have been succesfully registered!', toastObj);
       }
+      if (location.state.from === 'unauthorized') {
+        toast.error('You are not authorized to do that', toastObj);
+      }
       location.state.user = '';
     }
   }, []);

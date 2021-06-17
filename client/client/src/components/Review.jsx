@@ -15,7 +15,7 @@ export default function Review(props) {
   const [user, setUser] = useContext(UserContext);
   const location = useLocation();
   const history = useHistory();
-  const { review, campgroundId, handleReviewDelete, setToastState } = props;
+  const { review, campgroundId, setToastState } = props;
 
   const handleClick = (e) => {
     e.preventDefault();

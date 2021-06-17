@@ -42,13 +42,23 @@ export default function EditCampground() {
     }
     fetchData();
     console.log('From edit campground', campgroundState?.author?.username, user);
-    if (isDataLoaded && campgroundState?.author?.username !== JSON.stringify(user)) {
-      history.push({
-        pathname: `/login/`,
-        state: {
-          from: "unauthorized",
-        }
-      })
+    if (isDataLoaded && campgroundState?.author?.username !== user) {
+      if (user.length > 0) {
+        history.push({
+          pathname: `/campgrounds`,
+          state: {
+            from: "unauthorized",
+          }
+        })
+      }
+      else {
+        history.push({
+          pathname: `/login/`,
+          state: {
+            from: "unauthorized",
+          }
+        })
+      }
     };    
   }, [isDataLoaded]);
 
