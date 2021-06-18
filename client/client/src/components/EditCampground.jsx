@@ -31,6 +31,14 @@ export default function EditCampground() {
       try {
         const response = await fetch(`http://localhost:5000/campgrounds/${id}`);
         const json = await response.json();
+        if (json.err) {
+          history.push({
+            pathname: "/campgrounds",
+            state: {
+              from: "bad-id",
+            },
+          });
+        };
         setTitle(json.title);
         setLocation(json.location);
         setPrice(json.price);

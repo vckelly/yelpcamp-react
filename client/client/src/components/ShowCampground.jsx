@@ -86,6 +86,14 @@ function ShowCampground() {
       try {
         const response = await fetch(`http://localhost:5000/campgrounds/${id}`);
         const json = await response.json();
+        if (json.err) {
+          history.push({
+            pathname: "/campgrounds",
+            state: {
+              from: "bad-id",
+            },
+          });
+        }
         setCampgroundState(json);
         setLoaded(true);
         console.log(campgroundState);
