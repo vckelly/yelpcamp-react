@@ -13,17 +13,6 @@ import {
 
 const queryClient = new QueryClient();
 
-// ReactDOM.render(
-//   <React.StrictMode>
-    
-//       <Router>
-//         <App />
-//       </Router>
-
-//   </React.StrictMode>,
-//   document.getElementById('root')
-// );
-
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

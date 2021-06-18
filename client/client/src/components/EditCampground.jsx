@@ -137,7 +137,14 @@ export default function EditCampground() {
             },
           });
         }
-        //TODO: Error handling
+        else {
+          history.push({
+            pathname: "/campgrounds/" + id[id.length - 1],
+            state: {
+              from: "error",
+            },
+          });
+        };
       });
     },
   });

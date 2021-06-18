@@ -52,29 +52,29 @@ export default function Register() {
             body: JSON.stringify(data)
         }).then((res) => {
             //console.log("response", res);
-            if (res.status === 200) {
-                history.push({
-                    pathname: `/campgrounds/`,
-                    state: {
-                      from: "register",
-                    },
-                });
+            if (res.ok) {
+              history.push({
+                  pathname: `/campgrounds/`,
+                  state: {
+                    from: "register",
+                  },
+              });
             }
             else {
-                res.json()
-                .then((resJSON) => {
-                    console.log(resJSON);
-                    formik.resetForm();
-                    toast.error(resJSON['error'], {
-                        position: "top-right",
-                        autoClose: 2500,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                    });
-                })
+              res.json()
+              .then((resJSON) => {
+                  console.log(resJSON);
+                  formik.resetForm();
+                  toast.error(resJSON['error'], {
+                      position: "top-right",
+                      autoClose: 2500,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined,
+                  });
+              })
             }
           });
         },

@@ -30,19 +30,4 @@ function Campground(camp) {
   )
 }
 
-// { camp.campground.images.length > 0 ? (
-//   <Carousel>
-//     { camp.campground.images.forEach((img, i) => {
-//       <Carousel.Item>
-//         <img
-//           className="d-block w-100"
-//           src={img.url}
-//           alt="Slide"
-//         />
-//       </Carousel.Item>
-//     })}
-//   </Carousel>
-//   ) : ''
-// }      
-
 export default Campground;

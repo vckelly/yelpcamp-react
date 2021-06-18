@@ -55,7 +55,8 @@ export default function Login() {
               from: "login",
             },
           });
-        } else {
+        } 
+        else {
           formik.resetForm();
           toast.error("Username or password was incorrect. Try again.", {
             position: "top-right",
@@ -67,7 +68,6 @@ export default function Login() {
             progress: undefined,
           });
         }
-        //TODO: Error handling
       });
     },
   });

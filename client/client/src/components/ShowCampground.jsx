@@ -51,7 +51,14 @@ function ShowCampground() {
           },
         });
       }
-      //TODO: Error handling
+      else {
+        history.push({
+          pathname: "/campgrounds",
+          state: {
+            from: "error",
+          },
+        });
+      };
     });
   };
 
@@ -77,7 +84,14 @@ function ShowCampground() {
         setRatingText("");
         setToastState("add-review");
       }
-      //TODO: Error handling
+      else {
+        history.push({
+          pathname: "/campgrounds",
+          state: {
+            from: "error",
+          },
+        });
+      };
     });
   };
 

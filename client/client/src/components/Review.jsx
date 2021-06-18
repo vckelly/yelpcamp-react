@@ -34,7 +34,14 @@ export default function Review(props) {
       if (res.ok) {
         setToastState('delete-review')
       }
-      //TODO: Error handling
+      else {
+        history.push({
+          pathname: "/campgrounds",
+          state: {
+            from: "error",
+          },
+        });
+      };
     })
   };
 

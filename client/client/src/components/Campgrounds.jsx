@@ -69,6 +69,9 @@ export default function Campgrounds() {
       if (location.state.from === 'bad-id') {
         toast.error('That campground does not exist', toastObj);
       } 
+      if (location.state.from === 'error') {
+        toast.error('Something went wrong, sorry', toastObj);
+      }
       if (location.state.from === 'login') {
         toast.success('Welcome Back!', toastObj);
       }
