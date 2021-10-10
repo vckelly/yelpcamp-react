@@ -5,7 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "@material-ui/core/Button";
-import '../CustomNav.css';
+// import '../CustomNav.css';
 import { UserContext } from "../UserContext.js";
 
 import { QueryClient, useQueryClient, QueryCache } from "react-query";
