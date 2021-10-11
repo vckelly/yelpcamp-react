@@ -23,15 +23,35 @@ import {
 import { library } from '@fortawesome/fontawesome-svg-core';
 //import { fab } from '@fortawesome/free-brands-svg-icons';
 import { faSun } from '@fortawesome/free-solid-svg-icons';
+import { useIsFetching } from "react-query";
 library.add(faSun);
+
 
 
 function App() {
   const contextHook = useState(useContext(UserContext));
   const location = useLocation();
-  
-  const user = window.localStorage.getItem('user');
+  let user = window.localStorage.getItem('user');
+  useEffect(() => {
+    fetch("http://localhost:5000/users/logged_in", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        }
+      }).then((res) => {
+        if (res.ok) {
+          //console.log(res.json())
+          res.json().then((user) => {
+            contextHook[1](user);
+            window.localStorage.setItem('user', user);
+          });
+        }
+      }) 
+  }, []);
   console.log("From app", contextHook[0], user);
+  user = window.localStorage.getItem('user');
   
   //Tyler McGinnis' protected route component
   function PrivateRoute({ children, ...rest }) {
