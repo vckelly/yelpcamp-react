@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -10,11 +10,16 @@ import { UserContext } from "../UserContext.js";
 
 import { QueryClient, useQueryClient, QueryCache } from "react-query";
 
-export default function CustomNav(props) {
-  const [userCon, setUser] = useContext(UserContext);
+
+export default function CustomNav() {
+  let [userCon, setUser] = useContext(UserContext);
   const history = useHistory();
-  const user = window.localStorage.getItem("user");
-  //console.log('From nav', user, setUser);
+  //const user = window.localStorage.getItem("user");
+  console.log('From nav', userCon);
+
+  useEffect(() => {
+    setTimeout(() => {}, 5000);
+  }, []);
 
   // const queryCache = new QueryCache({
   //   onError: error => {
@@ -63,14 +68,13 @@ export default function CustomNav(props) {
         <Nav className="mr-auto">
           <Nav.Link href="/">Home</Nav.Link>
           <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
-          {user ? (
+          { userCon?.user?.length > 0 ? (
             <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
-          ) : (
-            ""
-          )}
+            ) : ("")
+          }
         </Nav>
         <Nav className="justify-content-end" activeKey="/home">
-          {user.length > 0 ? (
+          {userCon?.user?.length > 0 ? (
             <Nav.Item>
               <Button
                 color="secondary"

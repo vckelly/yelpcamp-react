@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useParams, useLocation, useHistory } from "react-router-dom";
 
-import Button from "react-bootstrap/Button";
+import Button from 'react-bootstrap/Button';
 import Card from "react-bootstrap/Card";
 import Carousel from "react-bootstrap/Carousel";
 import Form from "react-bootstrap/Form";
@@ -11,8 +11,7 @@ import "rc-rate/assets/index.css";
 import { UserContext } from "../UserContext.js";
 import ShowCampgroundMap from "./ShowCampgroundMap.jsx";
 import Review from "./Review.jsx";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

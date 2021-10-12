@@ -49,16 +49,15 @@ function App() {
           });
         }
       }) 
-  }, []);
+  }, [contextHook[0].user]);
   console.log("From app", contextHook[0], user);
-  user = window.localStorage.getItem('user');
+  user = contextHook[0];
   
   //Tyler McGinnis' protected route component
   function PrivateRoute({ children, ...rest }) {
-    console.log("Form privateRoute", user);
     return (
       <Route {...rest} render={({ location }) => {
-        return user.length > 0 
+        return contextHook[0]?.user?.length > 0 
           ? children
           : <Redirect to={{
               pathname: '/login',

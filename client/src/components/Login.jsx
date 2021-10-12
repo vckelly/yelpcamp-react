@@ -48,6 +48,7 @@ export default function Login() {
         if (res.ok) {
           setUser({ user: values.username });
           console.log("From login", userCon);
+          console.log(res.body);
           window.localStorage.setItem('user', values.username);
           history.push({
             pathname: `/campgrounds/`,
