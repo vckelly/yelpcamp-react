@@ -17,10 +17,6 @@ export default function CustomNav() {
   //const user = window.localStorage.getItem("user");
   console.log('From nav', userCon);
 
-  useEffect(() => {
-    setTimeout(() => {}, 5000);
-  }, []);
-
   // const queryCache = new QueryCache({
   //   onError: error => {
   //     console.log(error)
@@ -42,7 +38,7 @@ export default function CustomNav() {
     }).then((res) => {
       if (res.ok) {
         setUser({ user: "" });
-        window.localStorage.setItem("user", "");
+        window.localStorage.setItem('userId', "");
         history.push({
           pathname: "/campgrounds",
           state: {

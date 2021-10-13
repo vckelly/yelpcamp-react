@@ -28,7 +28,7 @@ function ShowCampground() {
   //if (location) { console.log("LOCATION", location.state) };
   //if (history) { console.log("history", history) };
   const [userCon, setUser] = useContext(UserContext);
-  const user = window.localStorage.getItem('user');
+  const userId = window.localStorage.getItem('userId');
 
   //TODO: Add delete button/functionality
 
@@ -113,6 +113,7 @@ function ShowCampground() {
       } catch (error) {}
     }
     fetchData();
+    console.log(campgroundState);
   }, [location.key, toastState, campgroundState?.location]);
 
   useEffect(() => {
@@ -196,7 +197,7 @@ function ShowCampground() {
                     {"$" + campgroundState.price + "/night"}
                   </ListGroup.Item>
                 </ListGroup>
-                {user === campgroundState.author.username ? (
+                {userId === campgroundState.author._id ? (
                   <>
                     <Link
                       to={`/campgrounds/${id}/edit`}
@@ -226,7 +227,7 @@ function ShowCampground() {
                   />
                 );
               })}
-              {user.length > 0 ? (
+              {userId ? (
                 <>
                   <h3>Leave a Review</h3>
                   <Form onSubmit={handleReview}>

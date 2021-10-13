@@ -88,7 +88,6 @@ export default function Campgrounds() {
       if (location.state.from === 'unauthorized') {
         toast.error('You are not authorized to do that', toastObj);
       }
-      location.state.user = '';
     }
   }, []);
 
@@ -110,7 +109,6 @@ export default function Campgrounds() {
   return (
     <div>
       <div className="campgrounds">
-        
         { isDataLoaded ? (
           <div>
             <MapboxGLMap campgrounds={campgroundState} />

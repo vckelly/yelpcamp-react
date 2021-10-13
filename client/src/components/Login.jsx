@@ -14,6 +14,16 @@ export default function Login() {
   const location = useLocation();
   let [userCon, setUser] = useContext(UserContext);
 
+  const setUserId = async function(res) {
+    return await ((res) => {
+      res
+        .json()
+        .then((resJSON) => {
+        window.localStorage.setItem('userId', resJSON.author._id);
+      })
+    }
+  )};
+
   const validationSchema = yup.object({
     username: yup
       .string("Enter your username")
@@ -30,7 +40,7 @@ export default function Login() {
       password: "con",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: values => {
       const data = {
         username: values.username,
         password: values.password,
@@ -46,10 +56,7 @@ export default function Login() {
         body: JSON.stringify(data),
       }).then((res) => {
         if (res.ok) {
-          setUser({ user: values.username });
-          console.log("From login", userCon);
-          console.log(res.body);
-          window.localStorage.setItem('user', values.username);
+          let success = setUserId(res);
           history.push({
             pathname: `/campgrounds/`,
             state: {

@@ -53,6 +53,12 @@ export default function Register() {
         }).then((res) => {
             //console.log("response", res);
             if (res.ok) {
+              res
+                .json()
+                .then((resJSON) => {
+                  console.log(resJSON);
+                  window.localStorage.setItem('userId', resJSON.author._id);
+                })
               history.push({
                   pathname: `/campgrounds/`,
                   state: {
