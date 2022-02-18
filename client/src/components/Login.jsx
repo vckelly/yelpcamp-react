@@ -9,20 +9,9 @@ import * as yup from "yup";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
-export default function Login() {
+export default function Login({ updateUserValue }) {
   const history = useHistory();
   const location = useLocation();
-  let [userCon, setUser] = useContext(UserContext);
-
-  const setUserId = async function(res) {
-    return await ((res) => {
-      res
-        .json()
-        .then((resJSON) => {
-        window.localStorage.setItem('userId', resJSON.author._id);
-      })
-    }
-  )};
 
   const validationSchema = yup.object({
     username: yup
@@ -48,7 +37,6 @@ export default function Login() {
 
       fetch("http://localhost:5000/login", {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
@@ -56,14 +44,20 @@ export default function Login() {
         body: JSON.stringify(data),
       }).then((res) => {
         if (res.ok) {
-          let success = setUserId(res);
-          history.push({
-            pathname: `/campgrounds/`,
-            state: {
-              from: "login",
-            },
-          });
-        } 
+          res
+            .json()
+            .then((result) => {
+              console.log('FROM LOGIN', result, result.session);
+              sessionStorage.setItem('user', result.session)
+              updateUserValue(result.session)
+              history.push({
+                pathname: `/campgrounds/`,
+                state: {
+                  from: "login",
+                },
+             });
+            }
+          )}           
         else {
           formik.resetForm();
           toast.error("Username or password was incorrect. Try again.", {
@@ -96,7 +90,7 @@ export default function Login() {
       }
       location.state.user = '';
     }
-  }, []);
+  }, [location.state]);
   
   return (
     <div className="container d-flex justify-content-center align-items-center mt-5">

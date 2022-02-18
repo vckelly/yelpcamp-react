@@ -8,14 +8,13 @@ import Form from "react-bootstrap/Form";
 import ListGroup from "react-bootstrap/ListGroup";
 import Rate from "rc-rate";
 import "rc-rate/assets/index.css";
-import { UserContext } from "../UserContext.js";
 import ShowCampgroundMap from "./ShowCampgroundMap.jsx";
 import Review from "./Review.jsx";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function ShowCampground() {
+function ShowCampground({ user }) {
   let { id } = useParams();
   const [campgroundState, setCampgroundState] = useState(null);
   const [isDataLoaded, setLoaded] = useState(false);
@@ -24,13 +23,6 @@ function ShowCampground() {
   const [toastState, setToastState] = useState("");
   const history = useHistory();
   const location = useLocation();
-
-  //if (location) { console.log("LOCATION", location.state) };
-  //if (history) { console.log("history", history) };
-  const [userCon, setUser] = useContext(UserContext);
-  const userId = window.localStorage.getItem('userId');
-
-  //TODO: Add delete button/functionality
 
   const handleDelete = (e) => {
     e.preventDefault();
@@ -78,6 +70,9 @@ function ShowCampground() {
       },
       body: JSON.stringify(review),
     }).then((res) => {
+      res
+        .json()
+        .then((JSONRes) => { console.log(JSONRes)});
       if (res.ok) {
         setRatingStars(1);
         setRatingText("");
@@ -109,7 +104,6 @@ function ShowCampground() {
         }
         setCampgroundState(json);
         setLoaded(true);
-        console.log(campgroundState);
       } catch (error) {}
     }
     fetchData();
@@ -117,7 +111,6 @@ function ShowCampground() {
   }, [location.key, toastState, campgroundState?.location]);
 
   useEffect(() => {
-    //TODO: fix Toast appearing on refresh
     const toastObj = {
       position: "top-right",
       autoClose: 1500,
@@ -172,7 +165,6 @@ function ShowCampground() {
                           className="d-block w-100"
                           src={img.url}
                           alt="Slide Here"
-                          className="showCampground-img"
                         />
                       </Carousel.Item>
                     );
@@ -197,7 +189,7 @@ function ShowCampground() {
                     {"$" + campgroundState.price + "/night"}
                   </ListGroup.Item>
                 </ListGroup>
-                {userId === campgroundState.author._id ? (
+                {user === campgroundState.author.username ? (
                   <>
                     <Link
                       to={`/campgrounds/${id}/edit`}
@@ -227,7 +219,7 @@ function ShowCampground() {
                   />
                 );
               })}
-              {userId ? (
+              {user ? (
                 <>
                   <h3>Leave a Review</h3>
                   <Form onSubmit={handleReview}>

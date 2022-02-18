@@ -49,7 +49,6 @@ export default function EditCampground() {
       } catch (error) {}
     }
     fetchData();
-    console.log('From edit campground', campgroundState?.author?.username, user);
     if (isDataLoaded && campgroundState?.author?.username !== user) {
       if (user.length > 0) {
         history.push({
@@ -68,7 +67,7 @@ export default function EditCampground() {
         })
       }
     };    
-  }, [isDataLoaded]);
+  }, []);
 
   const validationSchema = yup.object({
     title: yup
@@ -122,10 +121,9 @@ export default function EditCampground() {
       setLoaded(false);
 
       fetch(`http://localhost:5000/campgrounds/${id}?_method=PUT`, {
-        //fetch(('http://localhost:5000/campgrounds/' + id + '?_method=PUT'), {
         credentials: "include",
         method: "POST",
-        body: formData,
+        body: formData
       }).then((res) => {
         console.log("response", res);
         if (res.ok) {

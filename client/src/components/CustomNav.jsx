@@ -1,30 +1,11 @@
-import React, { useContext, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "@material-ui/core/Button";
-// import '../CustomNav.css';
-import { UserContext } from "../UserContext.js";
 
-import { QueryClient, useQueryClient, QueryCache } from "react-query";
-
-
-export default function CustomNav() {
-  let [userCon, setUser] = useContext(UserContext);
+export default function CustomNav({ user, updateUserValue }) {
   const history = useHistory();
-  //const user = window.localStorage.getItem("user");
-  console.log('From nav', userCon);
-
-  // const queryCache = new QueryCache({
-  //   onError: error => {
-  //     console.log(error)
-  //   },
-  // });
-  // const query = queryCache.findAll('user');
-  // console.log('From nav', query, user);
-
+  
   const handleLogout = (e) => {
     e.preventDefault();
 
@@ -33,12 +14,13 @@ export default function CustomNav() {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Accept: "application/json",
+        "Accept": "application/json",
       },
     }).then((res) => {
       if (res.ok) {
-        setUser({ user: "" });
-        window.localStorage.setItem('userId', "");
+        // setUser("");
+        sessionStorage.setItem("user", null);
+        updateUserValue(null)
         history.push({
           pathname: "/campgrounds",
           state: {
@@ -64,13 +46,13 @@ export default function CustomNav() {
         <Nav className="mr-auto">
           <Nav.Link href="/">Home</Nav.Link>
           <Nav.Link href="/campgrounds">Campgrounds</Nav.Link>
-          { userCon?.user?.length > 0 ? (
+          { user ? (
             <Nav.Link href="/campgrounds/new">New Campground</Nav.Link>
             ) : ("")
           }
         </Nav>
         <Nav className="justify-content-end" activeKey="/home">
-          {userCon?.user?.length > 0 ? (
+          { user ? (
             <Nav.Item>
               <Button
                 color="secondary"

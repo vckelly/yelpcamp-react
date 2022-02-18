@@ -46,7 +46,6 @@ const app = express();
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
-// app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -126,14 +125,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
-// app.use((req, res, next) => {
-//   const { url } = req;
-//   const isCookieSent = req.headers.cookie;
-//   console.log({ url });
-//   console.log({ isCookieSent });
-//   next();
-// });
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;

@@ -29,118 +29,117 @@ export default function Register() {
           .required("Password is required"),
       });
     
-      const formik = useFormik({
-        initialValues: {
-          email: "",
-          username: "",
-          password: "",
-        },
-        validationSchema: validationSchema,
-        onSubmit: (values) => {
-          const data = {
-            username: values.username,
-            password: values.password,
-            email: values.email
-          };
-    
-          fetch('http://localhost:5000/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(data)
-        }).then((res) => {
-            //console.log("response", res);
-            if (res.ok) {
-              res
-                .json()
-                .then((resJSON) => {
-                  console.log(resJSON);
-                  window.localStorage.setItem('userId', resJSON.author._id);
-                })
-              history.push({
-                  pathname: `/campgrounds/`,
-                  state: {
-                    from: "register",
-                  },
-              });
-            }
-            else {
-              res.json()
+    const formik = useFormik({
+      initialValues: {
+        email: "",
+        username: "",
+        password: "",
+      },
+      validationSchema: validationSchema,
+      onSubmit: (values) => {
+        const data = {
+          username: values.username,
+          password: values.password,
+          email: values.email
+        };
+  
+        fetch('http://localhost:5000/register', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+          },
+          body: JSON.stringify(data)
+      }).then((res) => {
+          if (res.ok) {
+            res
+              .json()
               .then((resJSON) => {
-                  console.log(resJSON);
-                  formik.resetForm();
-                  toast.error(resJSON['error'], {
-                      position: "top-right",
-                      autoClose: 2500,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined,
-                  });
+                console.log(resJSON);
+                window.localStorage.setItem('user', resJSON.author.username);
               })
-            }
-          });
-        },
-      });
+            history.push({
+                pathname: `/campgrounds/`,
+                state: {
+                  from: "register",
+                },
+            });
+          }
+          else {
+            res.json()
+            .then((resJSON) => {
+                console.log(resJSON);
+                formik.resetForm();
+                toast.error(resJSON['error'], {
+                    position: "top-right",
+                    autoClose: 2500,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+            })
+          }
+        });
+      },
+    });
     
-      return (
-        <div className="container d-flex justify-content-center align-items-center mt-5">
-          <div className="row">
-            <h2>Register</h2>
-            <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
-              <div className="card shadow">
-                <img
-                  src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
-                  alt=""
-                  className="card-img-top"
-                />
-              </div>
-              <form onSubmit={formik.handleSubmit} style={{ padding: "1vh" }}>
-                <TextField
-                    fullWidth
-                    id="email"
-                    name="email"
-                    label="Email Address"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
-                    style={{ padding: "1vh" }}
-                />
-                <TextField
-                  fullWidth
-                  id="username"
-                  name="username"
-                  label="Username"
-                  value={formik.values.username}
-                  onChange={formik.handleChange}
-                  error={formik.touched.username && Boolean(formik.errors.username)}
-                  helperText={formik.touched.username && formik.errors.username}
-                  style={{ padding: "1vh" }}
-                />
-                <TextField
-                  fullWidth
-                  id="password"
-                  name="password"
-                  label="Password"
-                  type="password"
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  error={formik.touched.password && Boolean(formik.errors.password)}
-                  helperText={formik.touched.password && formik.errors.password}
-                  style={{ padding: "1vh" }}
-                />
-                <Button color="primary" variant="contained" fullWidth type="submit">
-                  Submit
-                </Button>
-              </form>
+    return (
+      <div className="container d-flex justify-content-center align-items-center mt-5">
+        <div className="row">
+          <h2>Register</h2>
+          <div className="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+            <div className="card shadow">
+              <img
+                src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+                alt=""
+                className="card-img-top"
+              />
             </div>
+            <form onSubmit={formik.handleSubmit} style={{ padding: "1vh" }}>
+              <TextField
+                  fullWidth
+                  id="email"
+                  name="email"
+                  label="Email Address"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                  style={{ padding: "1vh" }}
+              />
+              <TextField
+                fullWidth
+                id="username"
+                name="username"
+                label="Username"
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                error={formik.touched.username && Boolean(formik.errors.username)}
+                helperText={formik.touched.username && formik.errors.username}
+                style={{ padding: "1vh" }}
+              />
+              <TextField
+                fullWidth
+                id="password"
+                name="password"
+                label="Password"
+                type="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                helperText={formik.touched.password && formik.errors.password}
+                style={{ padding: "1vh" }}
+              />
+              <Button color="primary" variant="contained" fullWidth type="submit">
+                Submit
+              </Button>
+            </form>
           </div>
         </div>
-      );
+      </div>
+    );
 }
 
  

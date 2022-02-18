@@ -7,7 +7,6 @@ const { cloudinary } = require("../cloudinary");
 
 module.exports.index = async (req, res) => {
     const campgrounds = await Campground.find({});
-    //res.render('campgrounds/index', { campgrounds })
     res.send(campgrounds);
 }
 
@@ -31,7 +30,6 @@ module.exports.createCampground = async (req, res, next) => {
     }
     campground.author = req.user._id;
     await campground.save();
-    //console.log(campground);
     res.redirect(`/campgrounds/${campground._id}`)
 }
 
@@ -47,7 +45,6 @@ module.exports.showCampground = async (req, res,) => {
     }
     res.send(campground);
 
-    //res.redirect(`/${campround_id}`);
 }
 
 module.exports.renderEditForm = async (req, res) => {
@@ -63,7 +60,6 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
     const parsedBody = JSON.parse(req.body.campground);
-    //console.log(req.body, parsedBody);
     const campground = await Campground.findByIdAndUpdate(id, { ...parsedBody });
     if (req.body.locationChange) {
         const geoData = await geocoder.forwardGeocode({

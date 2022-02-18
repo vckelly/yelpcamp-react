@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 module.exports.register = async (req, res, next) => {
   try {
     const { email, username, password } = req.body;
-    //console.log(req.body);
     const emailCheck = await User.findOne({ email: email });
     if (emailCheck) {
       return res.status(422).json({ error: 'That email is already in use!'})
@@ -21,7 +20,6 @@ module.exports.register = async (req, res, next) => {
       email: email.toLowerCase(), 
       username
     });
-    //console.log(user);
     const token = jwt.sign(
       { user_id: user._id, email },
       process.env.TOKEN_KEY,
@@ -29,10 +27,8 @@ module.exports.register = async (req, res, next) => {
         expiresIn: 60 * 5
       }
     );
-    //console.log(token);
 
     const registeredUser = await User.register(user, encryptedPW);
-    //console.log(user, registeredUser);
     
     req.login(registeredUser, err => { 
       if (err) return next(err);
@@ -48,11 +44,10 @@ module.exports.login = async (req, res) => {
   console.log('login', req.body, req.session);
   const redirectUrl = req.session.returnTo || '/campgrounds';
   delete req.session.returnTo;
-  res.redirect(redirectUrl);
+  res.status(200).send({ session: req.session });
 };
 
 module.exports.loggedIn = async (req, res) => {
-  //console.log('loggedIn', req.body, req.session);
   if (req.session.passport && req.session.passport.user) {
     return res.status(200).json({ user: req.session.passport.user });
   }

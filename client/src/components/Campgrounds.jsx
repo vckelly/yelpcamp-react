@@ -16,11 +16,8 @@ export default function Campgrounds() {
   let location = useLocation();
   let [isDataLoaded, setDataLoaded] = useState('false');
   let [gridDimensions, setGridDimensions] = useState(null);
-  const [user, setUser] = useContext(UserContext);
   
-  //console.log('From campgrounds', user, setUser);
   const NUM_COLS = 4;
-
   const [campgroundState, setCampgroundState] = useState([]);
 
   useEffect(() => {
@@ -50,8 +47,6 @@ export default function Campgrounds() {
     if (campgroundState.length === 0) {
       fetchData();
     }  
-    //TODO: check if this is correct way to load data with useEffect
-  // }, [campgroundState, isDataLoaded]);
   }, [campgroundState]);
 
   useEffect(() => {
@@ -89,7 +84,7 @@ export default function Campgrounds() {
         toast.error('You are not authorized to do that', toastObj);
       }
     }
-  }, []);
+  }, [location.state]);
 
   const Cell = ({ columnIndex, rowIndex, style }) => {
     let curIndex = columnIndex + (rowIndex * NUM_COLS);
@@ -99,6 +94,7 @@ export default function Campgrounds() {
           <Campground
             key={campgroundState[curIndex].id}
             campground={campgroundState[curIndex]}
+
           /> 
         </div>
       )
